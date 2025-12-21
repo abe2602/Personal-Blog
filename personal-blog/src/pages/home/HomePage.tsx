@@ -1,32 +1,69 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../../index.css";
 import { Post } from "../../models/Post";
-import mockedList from "../../data/MockedList";
 import SideMenu from "../../components/SideMenu";
 import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
+import { usePosts } from "../../data/posts/PostsRemoteDataSource";
 
 const HomePage = () => {
-  const [postsList, setPostsList] = useState<Post[]>([]);
-  const [filteredUsers, setSearchList] = useState<Post[]>([]);
-  const searchItems = (searchInput: string) => {
-    const searchList =
-      searchInput !== ""
-        ? postsList.filter((post) =>
-            post.title
-              .toLocaleLowerCase()
-              .includes(searchInput.toLocaleLowerCase())
-          )
-        : postsList;
+  const { data: remotePosts, isLoading, error } = usePosts();
+  const [searchTerm, setSearchTerm] = useState("");
 
-    setSearchList(searchList);
+  const postsList: Post[] = remotePosts
+    ? remotePosts.map((remotePost) => {
+        // Generate a random image URL for some posts
+        const imageUrl = remotePost.id % 3 === 0 
+          ? `https://picsum.photos/400/300?random=${remotePost.id}` 
+          : null;
+        
+        return new Post(
+          remotePost.title,
+          remotePost.body,
+          new Date(), // You might want to use a date from the API if available
+          imageUrl
+        );
+      })
+    : [];
+
+  const filteredUsers = searchTerm === ""
+    ? postsList
+    : postsList.filter((post) =>
+        post.title
+          .toLocaleLowerCase()
+          .includes(searchTerm.toLocaleLowerCase())
+      );
+
+  const searchItems = (searchInput: string) => {
+    setSearchTerm(searchInput);
   };
 
-  useEffect(() => {
-    setPostsList(mockedList);
-    setSearchList(mockedList);
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="main-container">
+        <NavBar/>
+        <div className="content-layout">
+          <div className="posts-section">
+            <p>Loading posts...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="main-container">
+        <NavBar/>
+        <div className="content-layout">
+          <div className="posts-section">
+            <p>Error loading posts: {error instanceof Error ? error.message : 'Unknown error'}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="main-container">
@@ -36,7 +73,7 @@ const HomePage = () => {
           <SearchInput onChangeCallback={searchItems} />
           <ul>
             {filteredUsers.map((post, index) => (
-              <PostContent index={index} post={post} />
+              <PostContent key={post.title + index} index={index} post={post} />
             ))}
           </ul>
         </div>

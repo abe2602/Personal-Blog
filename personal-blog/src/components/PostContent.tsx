@@ -18,9 +18,9 @@ const PostContent = (props: PostProps) => {
         <div className="main-content-text">
           <h3>{post.title}</h3>
           <small>{post.date.toLocaleDateString()}</small>
-          {post.description.length > 300 ? (
+          {post.description.length > 100 ? (
             <div>
-              <p>{post.description.substring(0, 300)}</p>
+              <p>{post.description.substring(0, 100)}</p>
               <a className="read-me" href="/post/1234">Read more</a>
             </div>
           ) : (
