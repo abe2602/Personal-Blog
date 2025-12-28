@@ -38,6 +38,10 @@ export default function HomeController({
     }
   }
 
+  function setSearchTerm(searchTerm: string) {
+    store.setSearchTerm(searchTerm)
+  }
+
   return {
     getPosts,
     posts: store.posts.filter((post) =>
@@ -45,6 +49,7 @@ export default function HomeController({
         .toLocaleLowerCase()
         .includes(store.searchTerm.toLocaleLowerCase())
     ),
+    setSearchTerm,
     isLoading: store.isLoading,
     error: store.error,
     searchTerm: store.searchTerm

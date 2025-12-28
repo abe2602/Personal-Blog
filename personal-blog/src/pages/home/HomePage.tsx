@@ -5,12 +5,20 @@ import SideMenu from "../../components/SideMenu";
 import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
-import DI from '../../di/BlogDiModule'
+import DI from "../../di/BlogDiModule";
 import { usePostsStore } from "./HomeStore";
 
 const HomePage = () => {
-  const { getPosts, setSearchTerm, posts, isLoading, error, searchTerm} = DI.resolve("HomeController");
-  const { scrollPosition, setScrollPosition} = usePostsStore();
+  const {
+    getPosts,
+    posts,
+    setSearchTerm,
+    isLoading,
+    error,
+    searchTerm,
+  } = DI.resolve("HomeController");
+
+  const {setScrollPosition, scrollPosition} = usePostsStore()
 
   useEffect(() => {
     getPosts();
@@ -27,14 +35,14 @@ const HomePage = () => {
       setScrollPosition(window.scrollY);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [setScrollPosition]);
 
   if (isLoading) {
     return (
       <div className="main-container">
-        <NavBar/>
+        <NavBar />
         <div className="content-layout">
           <div className="posts-section">
             <p>Loading posts...</p>
@@ -47,7 +55,7 @@ const HomePage = () => {
   if (error) {
     return (
       <div className="main-container">
-        <NavBar/>
+        <NavBar />
         <div className="content-layout">
           <div className="posts-section">
             <p>Error loading posts: {error}</p>
@@ -59,7 +67,7 @@ const HomePage = () => {
 
   return (
     <div className="main-container">
-      <NavBar/>
+      <NavBar />
       <div className="content-layout">
         <div className="posts-section">
           <SearchInput onChangeCallback={setSearchTerm} value={searchTerm} />
