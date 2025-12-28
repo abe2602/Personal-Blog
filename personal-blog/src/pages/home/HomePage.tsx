@@ -1,4 +1,4 @@
-import { useMemo, useLayoutEffect, useEffect } from "react";
+import { useLayoutEffect, useEffect } from "react";
 import "../../index.css";
 import { Post } from "../../models/Post";
 import SideMenu from "../../components/SideMenu";
@@ -9,8 +9,8 @@ import DI from '../../di/BlogDiModule'
 import { usePostsStore } from "./HomeStore";
 
 const HomePage = () => {
-  const { getPosts, filterPosts, posts, isLoading, error} = DI.resolve("HomeController");
-  const { scrollPosition, setScrollPosition, searchTerm } = usePostsStore();
+  const { getPosts, setSearchTerm, posts, isLoading, error, searchTerm} = DI.resolve("HomeController");
+  const { scrollPosition, setScrollPosition} = usePostsStore();
 
   useEffect(() => {
     getPosts();
@@ -30,10 +30,6 @@ const HomePage = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [setScrollPosition]);
-
-  const searchItems = (searchInput: string) => {
-    filterPosts(searchInput);
-  };
 
   if (isLoading) {
     return (
@@ -66,7 +62,7 @@ const HomePage = () => {
       <NavBar/>
       <div className="content-layout">
         <div className="posts-section">
-          <SearchInput onChangeCallback={searchItems} value={searchTerm} />
+          <SearchInput onChangeCallback={setSearchTerm} value={searchTerm} />
           <ul>
             {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />

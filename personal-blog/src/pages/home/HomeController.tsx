@@ -38,10 +38,6 @@ export default function HomeController({
     }
   }
 
-  function filterPosts(searchTerm: string) {
-    usePostsStore.getState().setSearchTerm(searchTerm);
-  }
-
   return {
     getPosts,
     posts: store.posts.filter((post) =>
@@ -51,7 +47,7 @@ export default function HomeController({
     ),
     isLoading: store.isLoading,
     error: store.error,
-    filterPosts
+    searchTerm: store.searchTerm
   };
 }
 
