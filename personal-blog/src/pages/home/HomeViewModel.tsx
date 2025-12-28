@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import * as PostsRemoteDataSourceType from "../../data/posts/PostsRemoteDataSource";
 import { RemotePost } from "../../data/model/RemotePost";
 import { Post } from "../../models/Post";
@@ -8,28 +9,48 @@ export default function HomeViewModel({
 }: {
   PostsRemoteDataSource: typeof PostsRemoteDataSourceType;
 }) {
+  const [error, setError] = useState<string>("");
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const store = usePostsStore.getState();
+
   async function getPosts() {
-    const store = usePostsStore.getState();
     if (store.posts.length > 0) {
-      store.setLoading(false);
+      setPosts(store.posts);
+      setLoading(false);
       return;
     }
-    
-    store.setLoading(true);
+
+    setLoading(true);
+
     try {
       const remotePosts = await PostsRemoteDataSource.getPosts();
       const postList = remotePosts.map((remotePost: RemotePost) => {
-        const imageUrl =  null;
-        return new Post(remotePost.title, remotePost.body, new Date(), imageUrl);
+        const imageUrl = null;
+        return new Post(
+          remotePost.title,
+          remotePost.body,
+          new Date(),
+          imageUrl
+        );
       });
+      if (postList.length > 0) {
+        usePostsStore.getState().setPosts(posts);
+      }
+      setPosts(postList);
+      setError("");
       store.setPosts(postList);
-      store.setError(null);
     } catch (error) {
-      store.setError(error instanceof Error ? error.message : "Unknown error");
+      setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
-      store.setLoading(false);
+      setLoading(false);
     }
   }
 
-  return { getPosts };
+  return {
+    getPosts,
+    posts,
+    isLoading,
+    error,
+  };
 }

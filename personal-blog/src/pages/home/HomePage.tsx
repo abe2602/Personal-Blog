@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useLayoutEffect } from "react";
 import "../../index.css";
 import { Post } from "../../models/Post";
 import SideMenu from "../../components/SideMenu";
@@ -14,19 +14,26 @@ import { usePostsStore } from "../../store/postsStore";
 const HomePage = () => {
   //const { data: remotePosts, isLoading, error } = usePosts();
   const [searchTerm, setSearchTerm] = useState("");
-  const { getPosts } = DI.resolve("HomeViewModel");
-  const { posts, isLoading, error, scrollPosition, setScrollPosition } = usePostsStore();
+  const { getPosts, posts, isLoading, error } = DI.resolve("HomeViewModel");
+  const { scrollPosition, setScrollPosition } = usePostsStore();
 
   useEffect(() => {
     getPosts();
   }, []);
 
-  // Restore scroll position
-  useEffect(() => {
-    if (scrollPosition > 0 && !isLoading) {
+  // Restore scroll position immediately on mount to prevent flash
+  useLayoutEffect(() => {
+    if (scrollPosition > 0) {
       window.scrollTo(0, scrollPosition);
     }
-  }, [isLoading, scrollPosition]);
+  }, []); // Only run once on mount
+
+  // Ensure scroll position is maintained after content loads
+  useLayoutEffect(() => {
+    if (scrollPosition > 0 && !isLoading && posts.length > 0) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [isLoading, posts.length, scrollPosition]);
 
   // Save scroll position
   useEffect(() => {
