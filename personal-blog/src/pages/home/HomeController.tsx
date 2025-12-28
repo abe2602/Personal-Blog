@@ -53,9 +53,13 @@ export default function HomeController({
     searchTerm: store.searchTerm,
   };
 
+  const actions = {
+    getPosts: getPosts,
+    setSearchTerm: setSearchTerm,
+  };
+
   return {
-    getPosts,
-    setSearchTerm,
+    actions,
     state,
   };
 }

@@ -9,7 +9,7 @@ import DI from "../../di/BlogDiModule";
 import { usePostsStore } from "./HomeStore";
 
 const HomePage = () => {
-  const { getPosts, setSearchTerm, state } =
+  const { actions, state } =
     DI.resolve("HomeController");
 
   const { setScrollPosition, scrollPosition } = usePostsStore();
@@ -19,7 +19,7 @@ const HomePage = () => {
   const error = state.error;
   
   useEffect(() => {
-    getPosts();
+    actions.getPosts();
   }, []);
 
   useLayoutEffect(() => {
@@ -68,7 +68,7 @@ const HomePage = () => {
       <NavBar />
       <div className="content-layout">
         <div className="posts-section">
-          <SearchInput onChangeCallback={setSearchTerm} value={searchTerm} />
+          <SearchInput onChangeCallback={actions.setSearchTerm} value={searchTerm} />
           <ul>
             {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />
