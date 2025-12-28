@@ -1,44 +1,88 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import "../../index.css";
 import { Post } from "../../models/Post";
 import SideMenu from "../../components/SideMenu";
 import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
-import { usePosts } from "../../data/posts/PostsRemoteDataSource";
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom";
+import DI from '../../di/BlogDiModule'
+import { RemotePost } from "../../data/model/RemotePost";
+import { usePostsStore } from "../../store/postsStore";
 
 const HomePage = () => {
-  const { data: remotePosts, isLoading, error } = usePosts();
+  //const { data: remotePosts, isLoading, error } = usePosts();
   const [searchTerm, setSearchTerm] = useState("");
+  const { getPosts } = DI.resolve("HomeViewModel");
+  const { posts, isLoading, error, scrollPosition, setScrollPosition } = usePostsStore();
 
-  const postsList: Post[] = remotePosts
-    ? remotePosts.map((remotePost) => {
-        // Generate a random image URL for some posts
-        const imageUrl = remotePost.id % 3 === 0 
-          ? `https://picsum.photos/400/300?random=${remotePost.id}` 
-          : null;
-        
-        return new Post(
-          remotePost.title,
-          remotePost.body,
-          new Date(), // You might want to use a date from the API if available
-          imageUrl
-        );
-      })
-    : [];
+  useEffect(() => {
+    getPosts();
+  }, []);
 
-  const filteredUsers = searchTerm === ""
-    ? postsList
-    : postsList.filter((post) =>
-        post.title
-          .toLocaleLowerCase()
-          .includes(searchTerm.toLocaleLowerCase())
-      );
+  // Restore scroll position
+  useEffect(() => {
+    if (scrollPosition > 0 && !isLoading) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [isLoading, scrollPosition]);
+
+  // Save scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [setScrollPosition]);
+
+  // const postsList: Post[] = useMemo(() => {
+  //   if (!remotePosts) return [];
+  //   return remotePosts.map((remotePost: RemotePost) => {
+  //     const imageUrl = remotePost.id % 3 === 0 
+  //       ? `https://picsum.photos/400/300?random=${remotePost.id}` 
+  //       : null;
+      
+  //     return new Post(
+  //       remotePost.title,
+  //       remotePost.body,
+  //       new Date(),
+  //       imageUrl
+  //     );
+  //   });
+  // }, [remotePosts]);
+
+  // const filteredUsers = useMemo(() => {
+  //   if (searchTerm === "") {
+  //     return postsList;
+  //   }
+    
+  //   return postsList.filter((post) =>
+  //     post.title
+  //       .toLocaleLowerCase()
+  //       .includes(searchTerm.toLocaleLowerCase())
+  //   );
+  // }, [postsList, searchTerm]);
 
   const searchItems = (searchInput: string) => {
     setSearchTerm(searchInput);
   };
 
+  const filteredUsers = useMemo(() => {
+    if (searchTerm === "") {
+      return posts;
+    }
+    
+    return posts.filter((post) =>
+      post.title
+        .toLocaleLowerCase()
+        .includes(searchTerm.toLocaleLowerCase())
+    );
+  }, [posts, searchTerm]);
+
+  
   if (isLoading) {
     return (
       <div className="main-container">
@@ -58,7 +102,7 @@ const HomePage = () => {
         <NavBar/>
         <div className="content-layout">
           <div className="posts-section">
-            <p>Error loading posts: {error instanceof Error ? error.message : 'Unknown error'}</p>
+            <p>Error loading posts: {error}</p>
           </div>
         </div>
       </div>
@@ -72,7 +116,7 @@ const HomePage = () => {
         <div className="posts-section">
           <SearchInput onChangeCallback={searchItems} />
           <ul>
-            {filteredUsers.map((post, index) => (
+            {filteredUsers.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />
             ))}
           </ul>

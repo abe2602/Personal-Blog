@@ -2,9 +2,19 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient, TIMEOUT } from "../RestApi";
 import { RemotePost } from "../model/RemotePost";
 
-const _getPosts = async (): Promise<RemotePost[]> => {
+export const getPosts = async (): Promise<RemotePost[]> => {
     const response = await apiClient.get<RemotePost[]>('');
-    return response.data;
+    console.log("from backend")
+    const posts = response.data;
+    
+    // Shuffle array using Fisher-Yates algorithm
+    const shuffled = [...posts];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled;
 };
 
 const _fetchPostById = async (id: number): Promise<RemotePost> => {
@@ -15,7 +25,7 @@ const _fetchPostById = async (id: number): Promise<RemotePost> => {
 export const usePosts = () => {
     return useQuery({
     queryKey: ['posts'],
-    queryFn: _getPosts,
+    queryFn: getPosts,
     staleTime: TIMEOUT,
     });
 };
@@ -25,7 +35,7 @@ export const usePost = (id: number) => {
     queryKey: ['post', id],
     queryFn: () => _fetchPostById(id),
     enabled: !!id,
-    staleTime: TIMEOUT,
+    //staleTime: TIMEOUT,
     });
 };
 
