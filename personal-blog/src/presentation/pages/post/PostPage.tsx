@@ -1,5 +1,4 @@
 import NavBar from "../../components/navbar/NavBar";
-import "../../index.css";
 import { useParams } from 'react-router-dom';
 
 

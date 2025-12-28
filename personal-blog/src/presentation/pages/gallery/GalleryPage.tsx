@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import NavBar from "../../components/navbar/NavBar";
-import { Post } from "../../models/Post";
-import "../../index.css";
-import mockedList from "../../data/MockedList";
+import { Post } from "../../../domain/model/Post";
+import mockedList from "../../../data/MockedList";
 import PostContent from "../../components/PostContent";
 
-const FavoritesPage = () => {
+const GalleryPage = () => {
 const [postsList, setPostsList] = useState<Post[]>([]);
 
 useEffect( () => {
@@ -28,4 +27,4 @@ useEffect( () => {
   );
 };
 
-export default FavoritesPage;
+export default GalleryPage;

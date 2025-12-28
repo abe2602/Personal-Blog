@@ -1,11 +1,10 @@
 import { useLayoutEffect, useEffect } from "react";
-import "../../index.css";
-import { Post } from "../../models/Post";
+import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/SideMenu";
 import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
-import DI from "../../di/BlogDiModule";
+import DI from "../../../di/DiModule";
 import { usePostsStore } from "./HomeStore";
 
 const HomePage = () => {

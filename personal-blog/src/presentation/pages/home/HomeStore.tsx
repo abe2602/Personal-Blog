@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Post } from '../../models/Post';
+import { Post } from '../../../domain/model/Post';
 
 interface PostsState {
   posts: Post[];

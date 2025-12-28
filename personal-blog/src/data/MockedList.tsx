@@ -1,4 +1,4 @@
-import { Post } from "../models/Post";
+import { Post } from "../domain/model/Post";
 
 const mockedList = [
   new Post(

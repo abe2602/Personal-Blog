@@ -1,12 +1,10 @@
-import * as PostsRemoteDataSourceType from "../../data/posts/PostsRemoteDataSource";
-import { RemotePost } from "../../data/model/RemotePost";
-import { Post } from "../../models/Post";
+import * as PostsRemoteRepository from "../../../data/posts/PostsRepository";
 import { usePostsStore } from "./HomeStore";
 
 export default function HomeController({
-  PostsRemoteDataSource,
+  postsRepository,
 }: {
-  PostsRemoteDataSource: typeof PostsRemoteDataSourceType;
+  postsRepository: typeof PostsRemoteRepository;
 }) {
   const store = usePostsStore.getState();
 
@@ -19,16 +17,7 @@ export default function HomeController({
     store.setLoading(true);
 
     try {
-      const remotePosts = await PostsRemoteDataSource.getPosts();
-      const postList = remotePosts.map((remotePost: RemotePost) => {
-        const imageUrl = null;
-        return new Post(
-          remotePost.title,
-          remotePost.body,
-          new Date(),
-          imageUrl
-        );
-      });
+      const postList = await postsRepository.getPosts();
       store.setPosts(postList);
       store.setError(null);
     } catch (error) {
