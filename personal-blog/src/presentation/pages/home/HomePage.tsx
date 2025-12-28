@@ -1,48 +1,45 @@
-import { useState } from "react";
-import "../../index.css";
-import { Post } from "../../models/Post";
+import { useLayoutEffect, useEffect } from "react";
+import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/SideMenu";
 import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
-import { usePosts } from "../../data/posts/PostsRemoteDataSource";
+import DI from "../../../di/DiModule";
+import { usePostsStore } from "./HomeStore";
 
 const HomePage = () => {
-  const { data: remotePosts, isLoading, error } = usePosts();
-  const [searchTerm, setSearchTerm] = useState("");
+  const { actions, state } =
+    DI.resolve("HomeController");
 
-  const postsList: Post[] = remotePosts
-    ? remotePosts.map((remotePost) => {
-        // Generate a random image URL for some posts
-        const imageUrl = remotePost.id % 3 === 0 
-          ? `https://picsum.photos/400/300?random=${remotePost.id}` 
-          : null;
-        
-        return new Post(
-          remotePost.title,
-          remotePost.body,
-          new Date(), // You might want to use a date from the API if available
-          imageUrl
-        );
-      })
-    : [];
+  const { setScrollPosition, scrollPosition } = usePostsStore();
+  const posts = state.posts
+  const isLoading = state.isLoading
+  const searchTerm = state.searchTerm
+  const error = state.error;
+  
+  useEffect(() => {
+    actions.getPosts();
+  }, []);
 
-  const filteredUsers = searchTerm === ""
-    ? postsList
-    : postsList.filter((post) =>
-        post.title
-          .toLocaleLowerCase()
-          .includes(searchTerm.toLocaleLowerCase())
-      );
+  useLayoutEffect(() => {
+    if (scrollPosition > 0 && !isLoading && posts.length > 0) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [isLoading, posts.length, scrollPosition]);
 
-  const searchItems = (searchInput: string) => {
-    setSearchTerm(searchInput);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [setScrollPosition]);
 
   if (isLoading) {
     return (
       <div className="main-container">
-        <NavBar/>
+        <NavBar />
         <div className="content-layout">
           <div className="posts-section">
             <p>Loading posts...</p>
@@ -55,10 +52,10 @@ const HomePage = () => {
   if (error) {
     return (
       <div className="main-container">
-        <NavBar/>
+        <NavBar />
         <div className="content-layout">
           <div className="posts-section">
-            <p>Error loading posts: {error instanceof Error ? error.message : 'Unknown error'}</p>
+            <p>Error loading posts: {error}</p>
           </div>
         </div>
       </div>
@@ -67,12 +64,12 @@ const HomePage = () => {
 
   return (
     <div className="main-container">
-      <NavBar/>
+      <NavBar />
       <div className="content-layout">
         <div className="posts-section">
-          <SearchInput onChangeCallback={searchItems} />
+          <SearchInput onChangeCallback={actions.setSearchTerm} value={searchTerm} />
           <ul>
-            {filteredUsers.map((post, index) => (
+            {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />
             ))}
           </ul>
