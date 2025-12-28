@@ -42,25 +42,16 @@ export default function HomeController({
     usePostsStore.getState().setSearchTerm(searchTerm);
   }
 
-  function getFilteredPosts() {
-    const currentStore = usePostsStore.getState();
-    if (currentStore.searchTerm === "") {
-      return currentStore.posts;
-    }
-    return currentStore.posts.filter((post) =>
-      post.title
-        .toLocaleLowerCase()
-        .includes(currentStore.searchTerm.toLocaleLowerCase())
-    );
-  }
-
   return {
     getPosts,
-    posts: store.posts,
+    posts: store.posts.filter((post) =>
+      post.title
+        .toLocaleLowerCase()
+        .includes(store.searchTerm.toLocaleLowerCase())
+    ),
     isLoading: store.isLoading,
     error: store.error,
-    filterPosts,
-    getFilteredPosts,
+    filterPosts
   };
 }
 

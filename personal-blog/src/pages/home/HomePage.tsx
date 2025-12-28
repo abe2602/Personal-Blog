@@ -9,9 +9,8 @@ import DI from '../../di/BlogDiModule'
 import { usePostsStore } from "./HomeStore";
 
 const HomePage = () => {
-  const { getPosts, posts, isLoading, error, filterPosts, getFilteredPosts } = DI.resolve("HomeController");
+  const { getPosts, filterPosts, posts, isLoading, error} = DI.resolve("HomeController");
   const { scrollPosition, setScrollPosition, searchTerm } = usePostsStore();
-  const filteredPosts = useMemo(() => getFilteredPosts(), [searchTerm, posts]);
 
   useEffect(() => {
     getPosts();
@@ -69,7 +68,7 @@ const HomePage = () => {
         <div className="posts-section">
           <SearchInput onChangeCallback={searchItems} value={searchTerm} />
           <ul>
-            {filteredPosts.map((post: Post, index: number) => (
+            {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />
             ))}
           </ul>
