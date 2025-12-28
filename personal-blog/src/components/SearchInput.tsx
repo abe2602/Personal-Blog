@@ -1,10 +1,15 @@
-import { SetStateAction, useState } from 'react';
-import { FaSearch, FaTimes } from 'react-icons/fa'; // Import the search icon and clear icon
+import { useState, useEffect } from 'react';
+import { FaSearch, FaTimes } from 'react-icons/fa';
 
-const SearchInput = ({ onChangeCallback }: { onChangeCallback: (value: string) => void }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchInput = ({ onChangeCallback, value = '' }: { onChangeCallback: (value: string) => void; value?: string }) => {
+  const [searchTerm, setSearchTerm] = useState(value);
 
-  const handleInputChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+  // Update local state when value prop changes
+  useEffect(() => {
+    setSearchTerm(value);
+  }, [value]);
+
+  const handleInputChange = (event: { target: { value: string; }; }) => {
     const searchText = event.target.value
     setSearchTerm(searchText);
     onChangeCallback(searchText.toString())

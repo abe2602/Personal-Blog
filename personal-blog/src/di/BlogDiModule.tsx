@@ -1,6 +1,6 @@
 import { createContainer, asValue, asFunction } from 'awilix'
 import * as PostsRemoteDataSource from "../data/posts/PostsRemoteDataSource";
-import HomeViewModel from '../pages/home/HomeViewModel';
+import HomeController from '../pages/home/HomeController';
 
 const container = createContainer({
     strict: true,
@@ -8,7 +8,7 @@ const container = createContainer({
 
 container.register({
     PostsRemoteDataSource: asValue(PostsRemoteDataSource),
-    HomeViewModel: asFunction(HomeViewModel)
+    HomeController: asFunction(HomeController)
 })
 
 export default container

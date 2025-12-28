@@ -1,16 +1,18 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Post } from '../models/Post';
+import { Post } from '../../models/Post';
 
 interface PostsState {
   posts: Post[];
   isLoading: boolean;
   error: string | null;
   scrollPosition: number;
+  searchTerm: string;
   setPosts: (posts: Post[]) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   setScrollPosition: (scrollPosition: number) => void;
+  setSearchTerm: (searchTerm: string) => void;
 }
 
 export const usePostsStore = create<PostsState>()(
@@ -20,15 +22,17 @@ export const usePostsStore = create<PostsState>()(
       isLoading: true,
       error: null,
       scrollPosition: 0,
+      searchTerm: "",
       setPosts: (posts) => set({ posts, isLoading: false }),
       setLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),
       setScrollPosition: (scrollPosition) => set({ scrollPosition }),
+      setSearchTerm: (searchTerm) => set({ searchTerm }),
     }),
     {
       name: 'posts-storage',
       storage: createJSONStorage(() => sessionStorage),
-      partialize: (state) => ({ posts: state.posts, scrollPosition: state.scrollPosition }),
+      partialize: (state) => ({ posts: state.posts, scrollPosition: state.scrollPosition, searchTerm: state.searchTerm }),
       onRehydrateStorage: () => (state) => {
         if (state?.posts && state.posts.length > 0) {
           // Convert date strings back to Date objects
