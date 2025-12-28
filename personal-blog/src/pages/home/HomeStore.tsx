@@ -35,7 +35,6 @@ export const usePostsStore = create<PostsState>()(
       partialize: (state) => ({ posts: state.posts, scrollPosition: state.scrollPosition, searchTerm: state.searchTerm }),
       onRehydrateStorage: () => (state) => {
         if (state?.posts && state.posts.length > 0) {
-          // Convert date strings back to Date objects
           state.posts = state.posts.map((post: any) => ({
             ...post,
             date: new Date(post.date),
