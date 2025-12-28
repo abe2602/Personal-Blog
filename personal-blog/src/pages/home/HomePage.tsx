@@ -9,17 +9,15 @@ import DI from "../../di/BlogDiModule";
 import { usePostsStore } from "./HomeStore";
 
 const HomePage = () => {
-  const {
-    getPosts,
-    posts,
-    setSearchTerm,
-    isLoading,
-    error,
-    searchTerm,
-  } = DI.resolve("HomeController");
+  const { getPosts, setSearchTerm, state } =
+    DI.resolve("HomeController");
 
-  const {setScrollPosition, scrollPosition} = usePostsStore()
-
+  const { setScrollPosition, scrollPosition } = usePostsStore();
+  const posts = state.posts
+  const isLoading = state.isLoading
+  const searchTerm = state.searchTerm
+  const error = state.error;
+  
   useEffect(() => {
     getPosts();
   }, []);

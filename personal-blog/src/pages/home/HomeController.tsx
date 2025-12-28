@@ -10,7 +10,7 @@ export default function HomeController({
 }) {
   const store = usePostsStore.getState();
 
-  async function getPosts() {  
+  async function getPosts() {
     if (store.posts.length > 0) {
       store.setLoading(false);
       return;
@@ -39,20 +39,23 @@ export default function HomeController({
   }
 
   function setSearchTerm(searchTerm: string) {
-    store.setSearchTerm(searchTerm)
+    store.setSearchTerm(searchTerm);
   }
 
-  return {
-    getPosts,
+  const state = {
     posts: store.posts.filter((post) =>
       post.title
         .toLocaleLowerCase()
         .includes(store.searchTerm.toLocaleLowerCase())
     ),
-    setSearchTerm,
     isLoading: store.isLoading,
     error: store.error,
-    searchTerm: store.searchTerm
+    searchTerm: store.searchTerm,
+  };
+
+  return {
+    getPosts,
+    setSearchTerm,
+    state,
   };
 }
-
