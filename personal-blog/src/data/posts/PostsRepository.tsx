@@ -4,7 +4,8 @@ import { RemotePost } from "../model/RemotePost";
 import { Post } from "../../domain/model/Post";
 
 export const getPosts = async (): Promise<Post[]> => {
-  const response = await apiClient.get<RemotePost[]>("");
+  const response = await apiClient.get<RemotePost[]>("posts");
+  console.log(response)
   return response.data.map((remotePost: RemotePost) => {
     const imageUrl = null;
     return new Post(remotePost.title, remotePost.body, new Date(), imageUrl);

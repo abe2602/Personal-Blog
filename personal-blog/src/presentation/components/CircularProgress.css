@@ -1,0 +1,39 @@
+.circular-progress-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+}
+
+.circular-progress {
+  transform: rotate(-90deg);
+}
+
+.circular-progress-track {
+  stroke: #E0E0E0;
+}
+
+.circular-progress-indicator {
+  stroke: #2563EB;
+  stroke-dasharray: 113.1;
+  stroke-dashoffset: 113.1;
+  animation: circular-progress-rotate 1.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes circular-progress-rotate {
+  0% {
+    stroke-dashoffset: 113.1;
+    transform: rotate(0deg);
+  }
+  50% {
+    stroke-dashoffset: 28.3;
+    transform: rotate(180deg);
+  }
+  100% {
+    stroke-dashoffset: 113.1;
+    transform: rotate(360deg);
+  }
+}
+
+
