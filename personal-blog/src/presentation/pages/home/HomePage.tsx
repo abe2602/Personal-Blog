@@ -6,6 +6,8 @@ import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
 import DI from "../../../di/DiModule";
 import { usePostsStore } from "./HomeStore";
+import InfiniteScroll from "react-infinite-scroll-component";
+import CircularProgress from "../../components/circular_progress/CircularProgress";
 
 const HomePage = () => {
   const { actions, state } =
@@ -42,7 +44,7 @@ const HomePage = () => {
         <NavBar />
         <div className="content-layout">
           <div className="posts-section">
-            <p>Loading posts...</p>
+            <CircularProgress />
           </div>
         </div>
       </div>
@@ -68,11 +70,19 @@ const HomePage = () => {
       <div className="content-layout">
         <div className="posts-section">
           <SearchInput onChangeCallback={actions.setSearchTerm} value={searchTerm} />
-          <ul>
-            {posts.map((post: Post, index: number) => (
-              <PostContent key={post.title + index} index={index} post={post} />
-            ))}
-          </ul>
+          <InfiniteScroll
+            dataLength={posts.length}
+            next={actions.getMorePosts}
+            hasMore={true}
+            loader={<CircularProgress />}
+            endMessage={<p style={{ textAlign: 'center' }}>No more posts to load</p>}
+          >
+            <ul>
+              {posts.map((post: Post, index: number) => (
+                <PostContent key={post.title + index} index={index} post={post} />
+              ))}
+            </ul>
+          </InfiniteScroll>
         </div>
         <div className="sidebar-section">
           <SideMenu

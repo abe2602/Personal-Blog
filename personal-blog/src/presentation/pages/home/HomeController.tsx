@@ -18,6 +18,7 @@ export default function HomeController({
 
     try {
       const postList = await postsRepository.getPosts();
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       store.setPosts(postList);
       store.setError(null);
     } catch (error) {
@@ -29,6 +30,16 @@ export default function HomeController({
 
   function setSearchTerm(searchTerm: string) {
     store.setSearchTerm(searchTerm);
+  }
+
+  async function getMorePosts() {
+    try {
+      store.setIsFetchingMore(true);
+      const postList = await postsRepository.getPosts();
+      store.setPosts([...store.posts, ...postList]);
+    } finally {
+      store.setIsFetchingMore(false);
+    }
   }
 
   const state = {
@@ -44,6 +55,7 @@ export default function HomeController({
 
   const actions = {
     getPosts: getPosts,
+    getMorePosts: getMorePosts,
     setSearchTerm: setSearchTerm,
   };
 

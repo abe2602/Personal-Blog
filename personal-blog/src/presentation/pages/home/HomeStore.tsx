@@ -1,10 +1,11 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { Post } from '../../../domain/model/Post';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { Post } from "../../../domain/model/Post";
 
 interface PostsState {
   posts: Post[];
   isLoading: boolean;
+  isFetchingMore: boolean;
   error: string | null;
   scrollPosition: number;
   searchTerm: string;
@@ -13,6 +14,7 @@ interface PostsState {
   setError: (error: string | null) => void;
   setScrollPosition: (scrollPosition: number) => void;
   setSearchTerm: (searchTerm: string) => void;
+  setIsFetchingMore: (isFetchingMore: boolean) => void;
 }
 
 export const usePostsStore = create<PostsState>()(
@@ -20,6 +22,7 @@ export const usePostsStore = create<PostsState>()(
     (set) => ({
       posts: [],
       isLoading: true,
+      isFetchingMore: false,
       error: null,
       scrollPosition: 0,
       searchTerm: "",
@@ -28,21 +31,30 @@ export const usePostsStore = create<PostsState>()(
       setError: (error) => set({ error }),
       setScrollPosition: (scrollPosition) => set({ scrollPosition }),
       setSearchTerm: (searchTerm) => set({ searchTerm }),
+      setIsFetchingMore: (isFetchingMore) => set({ isFetchingMore }),
     }),
     {
-      name: 'posts-storage',
+      name: "posts-storage",
       storage: createJSONStorage(() => sessionStorage),
-      partialize: (state) => ({ posts: state.posts, scrollPosition: state.scrollPosition, searchTerm: state.searchTerm }),
+      partialize: (state) => ({
+        posts: state.posts,
+        scrollPosition: state.scrollPosition,
+        searchTerm: state.searchTerm,
+      }),
       onRehydrateStorage: () => (state) => {
         if (state?.posts && state.posts.length > 0) {
-          state.posts = state.posts.map((post: any) => ({
-            ...post,
-            date: new Date(post.date),
-          })).map((post: any) => new Post(post.title, post.description, post.date, post.imageUrl));
+          state.posts = state.posts
+            .map((post: any) => ({
+              ...post,
+              date: new Date(post.date),
+            }))
+            .map(
+              (post: any) =>
+                new Post(post.title, post.description, post.date, post.imageUrl)
+            );
           state.setLoading(false);
         }
       },
     }
   )
 );
-

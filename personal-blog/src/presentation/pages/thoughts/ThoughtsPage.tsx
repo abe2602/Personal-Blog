@@ -6,6 +6,7 @@ import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
 import DI from "../../../di/DiModule";
 import { useThoughtsStore } from "./ThoughtsStore";
+import CircularProgress from "../../components/circular_progress/CircularProgress";
 
 const ThoughtsPage = () => {
   const { actions, state } =
@@ -42,7 +43,7 @@ const ThoughtsPage = () => {
         <NavBar />
         <div className="content-layout">
           <div className="posts-section">
-            <p>Loading posts...</p>
+            <CircularProgress />
           </div>
         </div>
       </div>
