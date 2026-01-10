@@ -47,3 +47,4 @@ export const useThoughtsStore = create<ThoughtsState>()(
 );
 
 
+
