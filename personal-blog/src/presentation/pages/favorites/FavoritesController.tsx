@@ -17,7 +17,7 @@ export default function FavoritesController({
     store.setLoading(true);
 
     try {
-      const postList = await postsRepository.getPosts();
+      const postList = await postsRepository.getFavoriteMediaPosts();
       store.setPosts(postList);
       store.setError(null);
     } catch (error) {

@@ -7,8 +7,38 @@ export const getPosts = async (): Promise<Post[]> => {
   const response = await apiClient.get<RemotePost[]>("posts");
   console.log(response)
   return response.data.map((remotePost: RemotePost) => {
-    const imageUrl = null;
-    return new Post(remotePost.title, remotePost.body, new Date(), imageUrl);
+    console.log(remotePost)
+    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
+  });
+};
+
+
+export const getFavoriteMediaPosts = async (): Promise<Post[]> => {
+  const response = await apiClient.get<RemotePost[]>("favorites");
+  console.log(response)
+  return response.data.map((remotePost: RemotePost) => {
+    console.log(remotePost)
+    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
+  });
+};
+
+
+export const getArtPosts = async (): Promise<Post[]> => {
+  const response = await apiClient.get<RemotePost[]>("gallery");
+  console.log(response)
+  return response.data.map((remotePost: RemotePost) => {
+    console.log(remotePost)
+    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
+  });
+};
+
+
+export const getThoughtsPosts = async (): Promise<Post[]> => {
+  const response = await apiClient.get<RemotePost[]>("thoughts");
+  console.log(response)
+  return response.data.map((remotePost: RemotePost) => {
+    console.log(remotePost)
+    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
   });
 };
 

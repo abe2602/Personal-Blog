@@ -64,6 +64,12 @@ body {
   color: #ffffff;
 }
 
+.navbar-items a.active {
+  border-bottom-color: #2563EB;
+  color: #ffffff;
+  font-weight: 600;
+}
+
 .main-container {
   background-color: #ffffff;
   min-height: 100vh;
@@ -73,13 +79,17 @@ body {
   list-style-type: none;
 }
 
-.post-image {
-  min-width: 0;
-  width: 100%;
+.post-image{
+  min-width: 20%;
+  width: 70%;
   height: auto;
+  align-items: center;
   object-fit: cover;
   border-radius: 0;
   margin-bottom: 20px;
+  display: block;
+  margin: auto;
+  padding-bottom: 20px;
 }
 
 .content-layout {
@@ -133,6 +143,7 @@ body {
   transform: none;
 }
 
+
 .main-content:last-child {
   border-bottom: none;
 }
@@ -156,6 +167,7 @@ body {
   font-size: 24px;
   font-weight: 400;
   line-height: 1.3;
+  text-align: left;
 }
 
 .main-content-text small {
@@ -163,6 +175,7 @@ body {
   font-size: 13px;
   display: block;
   margin-bottom: 15px;
+  text-align: left;
 }
 
 .main-content-text p {
@@ -178,6 +191,7 @@ body {
   text-decoration: none;
   transition: color 0.2s;
   font-size: 14px;
+  text-align: left;
 }
 
 .read-me:hover {
@@ -284,6 +298,61 @@ body {
 .search-input::-webkit-search-results-button,
 .search-input::-webkit-search-results-decoration {
   display: none;
+}
+
+/* Pagination styles */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.pagination-button {
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  color: #1A1A1A;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #2563EB;
+  color: #2563EB;
+}
+
+.pagination-button.active {
+  background-color: #2563EB;
+  color: #ffffff;
+  border-color: #2563EB;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-nav {
+  min-width: 80px;
+}
+
+.pagination-ellipsis {
+  padding: 8px 4px;
+  color: #6B6B6B;
 }
 
 /* Hide sidebar on small screens */

@@ -17,7 +17,7 @@ export default function ThoughtsController({
     store.setLoading(true);
 
     try {
-      const postList = await postsRepository.getPosts();
+      const postList = await postsRepository.getThoughtsPosts();
       store.setPosts(postList);
       store.setError(null);
     } catch (error) {

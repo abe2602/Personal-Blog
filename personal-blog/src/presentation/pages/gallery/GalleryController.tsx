@@ -17,7 +17,7 @@ export default function GalleryController({
     store.setLoading(true);
 
     try {
-      const postList = await postsRepository.getPosts();
+      const postList = await postsRepository.getArtPosts();
       store.setPosts(postList);
       store.setError(null);
     } catch (error) {

@@ -6,11 +6,9 @@ export default function HomeController({
 }: {
   postsRepository: typeof PostsRemoteRepository;
 }) {
-  const store = usePostsStore.getState();
-
   async function getPosts() {
-    if (store.posts.length > 0) {
-      store.setLoading(false);
+    const store = usePostsStore.getState();
+    if (store.posts.length > 0 && !store.isLoading) {
       return;
     }
 
@@ -21,6 +19,7 @@ export default function HomeController({
       await new Promise((resolve) => setTimeout(resolve, 3000));
       store.setPosts(postList);
       store.setError(null);
+      store.setCurrentPage(1);
     } catch (error) {
       store.setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
@@ -29,34 +28,48 @@ export default function HomeController({
   }
 
   function setSearchTerm(searchTerm: string) {
+    const store = usePostsStore.getState();
     store.setSearchTerm(searchTerm);
   }
 
-  async function getMorePosts() {
-    try {
-      store.setIsFetchingMore(true);
-      const postList = await postsRepository.getPosts();
-      store.setPosts([...store.posts, ...postList]);
-    } finally {
-      store.setIsFetchingMore(false);
-    }
+  function setCurrentPage(page: number) {
+    const store = usePostsStore.getState();
+    store.setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  const state = {
-    posts: store.posts.filter((post) =>
+  // Create a getter function that always gets fresh state
+  function getState() {
+    const store = usePostsStore.getState();
+    const filteredPosts = store.posts.filter((post) =>
       post.title
         .toLocaleLowerCase()
         .includes(store.searchTerm.toLocaleLowerCase())
-    ),
-    isLoading: store.isLoading,
-    error: store.error,
-    searchTerm: store.searchTerm,
-  };
+    );
+
+    const totalPages = Math.max(1, Math.ceil(filteredPosts.length / store.postsPerPage));
+    const startIndex = (store.currentPage - 1) * store.postsPerPage;
+    const endIndex = startIndex + store.postsPerPage;
+    const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
+
+    return {
+      posts: paginatedPosts,
+      allPosts: filteredPosts,
+      isLoading: store.isLoading,
+      error: store.error,
+      searchTerm: store.searchTerm,
+      currentPage: store.currentPage,
+      totalPages: totalPages,
+      postsPerPage: store.postsPerPage,
+    };
+  }
+
+  const state = getState();
 
   const actions = {
     getPosts: getPosts,
-    getMorePosts: getMorePosts,
     setSearchTerm: setSearchTerm,
+    setCurrentPage: setCurrentPage,
   };
 
   return {
