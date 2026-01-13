@@ -18,10 +18,10 @@ const PostContent = (props: PostProps) => {
             <img src={post.imageUrl} alt={post.title} className={`post-image`} />
           )}
 
-          {post.description.length > 1000 ? (
+          {post.description.length > 500 ? (
             <div>
-              <p>{post.description.substring(0, 1000)}</p>
-              <a className="read-me" href={"/post/${post.id}"}>
+              <p>{post.description.substring(0, 500)}</p>
+              <a className="read-me" href={`/post/${post.id}`}>
                 Read more
               </a>
             </div>

@@ -38,7 +38,7 @@ export const useFavoritesStore = create<FavoritesState>()(
           state.posts = state.posts.map((post: any) => ({
             ...post,
             date: new Date(post.date),
-          })).map((post: any) => new Post(post.title, post.description, post.date, post.imageUrl));
+          })).map((post: any) => new Post(post.title, post.description, post.date, post.imageUrl, post.id ?? null));
           state.setLoading(false);
         }
       },

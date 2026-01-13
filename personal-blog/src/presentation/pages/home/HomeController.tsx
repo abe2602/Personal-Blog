@@ -35,6 +35,7 @@ export default function HomeController({
   function setCurrentPage(page: number) {
     const store = usePostsStore.getState();
     store.setCurrentPage(page);
+    store.setScrollPosition(0);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 

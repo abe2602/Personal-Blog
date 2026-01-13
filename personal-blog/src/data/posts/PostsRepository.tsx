@@ -1,56 +1,76 @@
-import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../RestApi";
 import { RemotePost } from "../model/RemotePost";
 import { Post } from "../../domain/model/Post";
 
 export const getPosts = async (): Promise<Post[]> => {
   const response = await apiClient.get<RemotePost[]>("posts");
-  console.log(response)
+  console.log(response);
   return response.data.map((remotePost: RemotePost) => {
-    console.log(remotePost)
-    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
+    console.log(remotePost);
+    return new Post(
+      remotePost.title,
+      remotePost.body,
+      new Date(),
+      remotePost.imageUrl,
+      remotePost.id
+    );
   });
 };
-
 
 export const getFavoriteMediaPosts = async (): Promise<Post[]> => {
   const response = await apiClient.get<RemotePost[]>("favorites");
-  console.log(response)
+  console.log(response);
   return response.data.map((remotePost: RemotePost) => {
-    console.log(remotePost)
-    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
+    console.log(remotePost);
+    return new Post(
+      remotePost.title,
+      remotePost.body,
+      new Date(),
+      remotePost.imageUrl,
+      remotePost.id
+    );
   });
 };
-
 
 export const getArtPosts = async (): Promise<Post[]> => {
   const response = await apiClient.get<RemotePost[]>("gallery");
-  console.log(response)
+  console.log(response);
   return response.data.map((remotePost: RemotePost) => {
-    console.log(remotePost)
-    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
+    console.log(remotePost);
+    return new Post(
+      remotePost.title,
+      remotePost.body,
+      new Date(),
+      remotePost.imageUrl,
+      remotePost.id
+    );
   });
 };
-
 
 export const getThoughtsPosts = async (): Promise<Post[]> => {
   const response = await apiClient.get<RemotePost[]>("thoughts");
-  console.log(response)
+  console.log(response);
   return response.data.map((remotePost: RemotePost) => {
-    console.log(remotePost)
-    return new Post(remotePost.title, remotePost.body, new Date(), remotePost.imageUrl);
+    console.log(remotePost);
+    return new Post(
+      remotePost.title,
+      remotePost.body,
+      new Date(),
+      remotePost.imageUrl,
+      remotePost.id
+    );
   });
 };
 
-const _fetchPostById = async (id: number): Promise<RemotePost> => {
-  const response = await apiClient.get<RemotePost>(`/${id}`);
-  return response.data;
-};
-
-export const usePost = (id: number) => {
-  return useQuery({
-    queryKey: ["post", id],
-    queryFn: () => _fetchPostById(id),
-    enabled: !!id,
-  });
+export const getPost = async (id: number): Promise<Post> => {
+  const response = await apiClient.get<RemotePost>(`post/${id}`);
+  const remotePost = response.data;
+  const post = new Post(
+    remotePost.title,
+    remotePost.body,
+    new Date(),
+    remotePost.imageUrl,
+    remotePost.id
+  );
+  return post;
 };

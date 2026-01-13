@@ -1,5 +1,6 @@
 package org.example
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -436,12 +437,30 @@ fun Route.getPostsList() {
     get("/posts") {
         call.respond(posts)
     }
+
+    get("/post/{id}") {
+        val id = call.parameters["id"]?.toIntOrNull()
+
+        if (id == null) {
+            call.respond(HttpStatusCode.BadRequest, "Invalid post ID")
+            return@get
+        }
+
+        return@get posts.firstOrNull { it.id == id } ?.let {
+            call.respond(it)
+        } ?: run {call.respond(HttpStatusCode.NotFound, "Post not found")
+
+        }
+    }
+
     get("/favorites") {
         call.respond(posts.filter { it.type == PostType.FAVORITE_CONTENT })
     }
+
     get("/gallery") {
         call.respond(posts.filter { it.type == PostType.MEDIA })
     }
+
     get("/thoughts") {
         call.respond(posts.filter { it.type == PostType.THOUGHTS })
     }

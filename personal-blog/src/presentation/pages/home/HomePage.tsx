@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/SideMenu";
 import PostContent from "../../components/PostContent";
@@ -18,6 +18,7 @@ const HomePage = () => {
   const error = usePostsStore((state) => state.error);
   const currentPage = usePostsStore((state) => state.currentPage);
   const postsPerPage = usePostsStore((state) => state.postsPerPage);
+  const { setScrollPosition, scrollPosition } = usePostsStore();
 
   // Compute pagination from store state
   const filteredPosts = storePosts.filter((post) =>
@@ -34,6 +35,21 @@ const HomePage = () => {
   useEffect(() => {
     actions.getPosts();
   }, []);
+
+  useLayoutEffect(() => {
+    if (scrollPosition > 0 && !isLoading && storePosts.length > 0) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [isLoading, storePosts.length, scrollPosition]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [setScrollPosition]);
 
   if (isLoading) {
     return (

@@ -9,15 +9,14 @@ import { useGalleryStore } from "./GalleryStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
 
 const GalleryPage = () => {
-  const { actions, state } =
-    DI.resolve("GalleryController");
+  const { actions, state } = DI.resolve("GalleryController");
 
   const { setScrollPosition, scrollPosition } = useGalleryStore();
-  const posts = state.posts
-  const isLoading = state.isLoading
-  const searchTerm = state.searchTerm
+  const posts = state.posts;
+  const isLoading = state.isLoading;
+  const searchTerm = state.searchTerm;
   const error = state.error;
-  
+
   useEffect(() => {
     actions.getPosts();
   }, []);
@@ -68,7 +67,10 @@ const GalleryPage = () => {
       <NavBar />
       <div className="content-layout">
         <div className="posts-section">
-          <SearchInput onChangeCallback={actions.setSearchTerm} value={searchTerm} />
+          <SearchInput
+            onChangeCallback={actions.setSearchTerm}
+            value={searchTerm}
+          />
           <ul>
             {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />

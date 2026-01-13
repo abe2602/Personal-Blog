@@ -53,7 +53,7 @@ export const usePostsStore = create<PostsState>()(
             }))
             .map(
               (post: any) =>
-                new Post(post.title, post.description, post.date, post.imageUrl)
+                new Post(post.title, post.description, post.date, post.imageUrl, post.id ?? null)
             );
           state.setLoading(false);
         }
