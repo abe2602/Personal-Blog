@@ -6,19 +6,15 @@ export default function PostController({
 }: {
     postsRepository: typeof PostsRemoteRepository;
 }) {
+    usePostStore()
     const store = usePostStore.getState();
-    
     async function getPost(id: number) {
-        if (store.post != null && !store.isLoading) {
-            return;
-        }
-
         store.setLoading(true);
-        store.setError(null);
-
+        
         try {    
             const post = await postsRepository.getPost(id);
             store.setPost(post);
+            store.setError(null);
             console.log("post", post);
         } catch (error) {
             store.setError(error instanceof Error ? error.message : "Unknown error");  

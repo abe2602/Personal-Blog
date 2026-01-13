@@ -448,9 +448,7 @@ fun Route.getPostsList() {
 
         return@get posts.firstOrNull { it.id == id } ?.let {
             call.respond(it)
-        } ?: run {call.respond(HttpStatusCode.NotFound, "Post not found")
-
-        }
+        } ?: run {call.respond(HttpStatusCode.NotFound, "Post not found") }
     }
 
     get("/favorites") {
