@@ -41,6 +41,16 @@ const HomePage = () => {
   const endIndex = startIndex + postsPerPage;
   const posts = filteredPosts.slice(startIndex, endIndex);
   
+  // Debug: Log pagination info
+  console.log('Pagination Debug:', {
+    totalPosts: storePosts.length,
+    filteredPosts: filteredPosts.length,
+    postsPerPage,
+    totalPages,
+    currentPage,
+    shouldShowPagination: totalPages > 1
+  });
+  
   useEffect(() => {
     actions.getPosts();
   }, []);
