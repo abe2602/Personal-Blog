@@ -1,6 +1,6 @@
 import { useLayoutEffect, useEffect } from "react";
 import { Post } from "../../../domain/model/Post";
-import SideMenu from "../../components/SideMenu";
+import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";

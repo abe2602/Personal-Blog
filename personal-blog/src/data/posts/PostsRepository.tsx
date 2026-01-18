@@ -1,5 +1,5 @@
 import { apiClient } from "../RestApi";
-import { RemotePost } from "../model/RemotePost";
+import { RemotePost } from "./model/RemotePost";
 import { Post } from "../../domain/model/Post";
 
 export const getPosts = async (): Promise<Post[]> => {

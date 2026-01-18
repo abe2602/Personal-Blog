@@ -1,22 +1,32 @@
 import * as PostsRemoteRepository from "../../../data/posts/PostsRepository";
+import * as ProfileRemoteRepository from "../../../data/profile/ProfileRepository";
 import { usePostsStore } from "./HomeStore";
+import { useProfileStore } from "../../components/profile_sidemenu/ProfileSideMenuStore";
 
 export default function HomeController({
-  postsRepository,
+  postsRepository, profileRepository
 }: {
   postsRepository: typeof PostsRemoteRepository;
+  profileRepository: typeof ProfileRemoteRepository;
 }) {
-  async function getPosts() {
-    const store = usePostsStore.getState();
-    if (store.posts.length > 0 && !store.isLoading) {
+  const store = usePostsStore.getState();
+  const profileStore = useProfileStore.getState();
+
+  async function getPosts() {  
+    if (store.posts.length > 0 && !store.isLoading && profileStore.profile) {
       return;
     }
 
     store.setLoading(true);
 
+
     try {
       const postList = await postsRepository.getPosts();
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      const profile = await profileRepository.getProfile();
+
+      profileStore.setProfile(profile)
+      profileStore.setError(null)
+
       store.setPosts(postList);
       store.setError(null);
       store.setCurrentPage(1);
@@ -28,25 +38,20 @@ export default function HomeController({
   }
 
   function setSearchTerm(searchTerm: string) {
-    const store = usePostsStore.getState();
     store.setSearchTerm(searchTerm);
   }
 
   function setSelectedYear(year: number | null) {
-    const store = usePostsStore.getState();
     store.setSelectedYear(year);
   }
 
   function setCurrentPage(page: number) {
-    const store = usePostsStore.getState();
     store.setCurrentPage(page);
     store.setScrollPosition(0);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Create a getter function that always gets fresh state
   function getState() {
-    const store = usePostsStore.getState();
     const filteredPosts = store.posts.filter((post) => {
       const matchesSearch = post.title
         .toLocaleLowerCase()

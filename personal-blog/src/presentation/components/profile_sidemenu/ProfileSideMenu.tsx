@@ -1,3 +1,5 @@
+import DI from "../../../di/DiModule";
+
 interface SideMenuProps {
   imageUrl?: string;
   message: string;
@@ -6,6 +8,8 @@ interface SideMenuProps {
   selectedYear?: number | null;
   onYearSelect?: (year: number | null) => void;
 }
+
+const {  } = DI.resolve("ProfileSideMenuController");
 
 const SideMenu = (props: SideMenuProps) => {
   return (

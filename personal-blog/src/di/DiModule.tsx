@@ -1,11 +1,12 @@
 import { createContainer, asValue, asFunction } from 'awilix'
 import * as PostsRemoteRepositoryImpl from "../data/posts/PostsRepository";
+import * as ProfileRepositoryImpl from "../data/profile/ProfileRepository";
 import HomeController from '../presentation/pages/home/HomeController';
 import FavoritesController from '../presentation/pages/favorites/FavoritesController';
 import GalleryController from '../presentation/pages/gallery/GalleryController';
 import ThoughtsController from '../presentation/pages/thoughts/ThoughtsController';
 import PostController from '../presentation/pages/post/PostController';
-
+import ProfileSideMenuController from '../presentation/components/profile_sidemenu/ProfileSideMenuController';
 
 const container = createContainer({
     strict: true,
@@ -13,11 +14,13 @@ const container = createContainer({
 
 container.register({
     postsRepository: asValue(PostsRemoteRepositoryImpl),
+    profileRepository: asValue(ProfileRepositoryImpl),
     HomeController: asFunction(HomeController),
     FavoritesController: asFunction(FavoritesController),
     GalleryController: asFunction(GalleryController),
     ThoughtsController: asFunction(ThoughtsController),
-    PostController: asFunction(PostController)
+    PostController: asFunction(PostController),
+    ProfileSideMenuController: asFunction(ProfileSideMenuController)
 })
 
 export default container
