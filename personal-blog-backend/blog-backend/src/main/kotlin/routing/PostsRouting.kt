@@ -5,12 +5,17 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import org.example.domain.model.PostType
-import org.example.posts
+import org.example.domain.usecase.GetPost
+import org.example.domain.usecase.GetPostsList
+import org.koin.ktor.ext.inject
 import kotlin.text.toIntOrNull
 
 fun Route.getPostsRouting() {
+    val getPostsList by inject<GetPostsList>()
+    val getPost by inject<GetPost>()
+
     get("/posts") {
-        call.respond(posts)
+        call.respond(getPostsList())
     }
 
     get("/post/{id}") {
@@ -21,20 +26,22 @@ fun Route.getPostsRouting() {
             return@get
         }
 
-        return@get posts.firstOrNull { it.id == id } ?.let {
+        getPost(id = id) ?.let {
             call.respond(it)
-        } ?: run {call.respond(HttpStatusCode.NotFound, "Post not found") }
+        } ?: run {
+            call.respond(HttpStatusCode.NotFound, "Post not found")
+        }
     }
 
     get("/favorites") {
-        call.respond(posts.filter { it.type == PostType.FAVORITE_CONTENT })
+        call.respond(getPostsList(PostType.FAVORITE_CONTENT))
     }
 
     get("/gallery") {
-        call.respond(posts.filter { it.type == PostType.MEDIA })
+        call.respond(getPostsList(PostType.MEDIA))
     }
 
     get("/thoughts") {
-        call.respond(posts.filter { it.type == PostType.THOUGHTS })
+        call.respond(getPostsList(PostType.THOUGHTS))
     }
 }

@@ -18,6 +18,12 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:2.3.0")
     implementation("io.ktor:ktor-server-auth:2.3.0") // For authentication
     implementation("ch.qos.logback:logback-classic:1.2.10") // Logging
+    
+    // Koin for Dependency Injection
+    implementation("io.insert-koin:koin-core:3.5.6")
+    implementation("io.insert-koin:koin-ktor:3.5.6")
+    implementation("io.insert-koin:koin-logger-slf4j:3.5.6")
+    
     testImplementation("io.ktor:ktor-server-tests:2.3.0")
 }
 
