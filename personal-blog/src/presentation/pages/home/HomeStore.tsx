@@ -30,7 +30,7 @@ export const usePostsStore = create<PostsState>()(
       searchTerm: "",
       selectedYear: null,
       currentPage: 1,
-      postsPerPage: 40,
+      postsPerPage: 6,
       setPosts: (posts) => set({ posts, isLoading: false }),
       setLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),

@@ -9,57 +9,32 @@ import { usePostsStore } from "./HomeStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
 
 const HomePage = () => {
-  const { actions } = DI.resolve("HomeController");
-
-  // Subscribe to store changes to make it reactive
-  const storePosts = usePostsStore((state) => state.posts);
-  const isLoading = usePostsStore((state) => state.isLoading);
-  const searchTerm = usePostsStore((state) => state.searchTerm);
-  const selectedYear = usePostsStore((state) => state.selectedYear);
-  const error = usePostsStore((state) => state.error);
-  const currentPage = usePostsStore((state) => state.currentPage);
-  const postsPerPage = usePostsStore((state) => state.postsPerPage);
+  const { } = usePostsStore();
+  const { actions, state } = DI.resolve("HomeController");
   const { setScrollPosition, scrollPosition } = usePostsStore();
 
-  // Get unique years from posts
-  const availableYears = Array.from(
-    new Set(storePosts.map((post) => post.date.getFullYear()))
-  ).sort((a, b) => b - a);
-
-  // Compute pagination from store state
-  const filteredPosts = storePosts.filter((post) => {
-    const matchesSearch = post.title
-      .toLocaleLowerCase()
-      .includes(searchTerm.toLocaleLowerCase());
-    const matchesYear = selectedYear === null || 
-      post.date.getFullYear() === selectedYear;
-    return matchesSearch && matchesYear;
-  });
-
-  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / postsPerPage));
+  // Subscribe to store changes to make it reactive
+  const posts = state.posts;
+  const isLoading = state.isLoading;
+  const searchTerm = state.searchTerm;
+  const selectedYear = state.selectedYear;
+  const error = state.error;
+  const currentPage = state.currentPage;
+  const postsPerPage = state.postsPerPage;
+  const availableYears = state.availableYears;
+  const totalPages = state.totalPages;
   const startIndex = (currentPage - 1) * postsPerPage;
   const endIndex = startIndex + postsPerPage;
-  const posts = filteredPosts.slice(startIndex, endIndex);
-  
-  // Debug: Log pagination info
-  console.log('Pagination Debug:', {
-    totalPosts: storePosts.length,
-    filteredPosts: filteredPosts.length,
-    postsPerPage,
-    totalPages,
-    currentPage,
-    shouldShowPagination: totalPages > 1
-  });
   
   useEffect(() => {
     actions.getPosts();
   }, []);
 
   useLayoutEffect(() => {
-    if (scrollPosition > 0 && !isLoading && storePosts.length > 0) {
+    if (scrollPosition > 0 && !isLoading && posts.length > 0) {
       window.scrollTo(0, scrollPosition);
     }
-  }, [isLoading, storePosts.length, scrollPosition]);
+  }, [isLoading, posts.length, scrollPosition]);
 
   useEffect(() => {
     const handleScroll = () => {

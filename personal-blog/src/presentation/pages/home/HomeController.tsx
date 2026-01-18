@@ -76,13 +76,17 @@ export default function HomeController({
 
     return {
       posts: paginatedPosts,
-      allPosts: filteredPosts,
+      allPostsSize: filteredPosts.length,
       isLoading: store.isLoading,
       error: store.error,
       searchTerm: store.searchTerm,
       currentPage: store.currentPage,
       totalPages: totalPages,
       postsPerPage: store.postsPerPage,
+      selectedYear: store.selectedYear,
+      availableYears: Array.from(
+        new Set(store.posts.map((post) => post.date.getFullYear()))
+      ).sort((a, b) => b - a),
     };
   }
 
