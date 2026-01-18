@@ -1,30 +1,40 @@
 import DI from "../../../di/DiModule";
+import { useProfileStore } from "./ProfileSideMenuStore";
 
 interface SideMenuProps {
-  imageUrl?: string;
-  message: string;
-  description: string;
   availableYears?: number[];
   selectedYear?: number | null;
   onYearSelect?: (year: number | null) => void;
 }
 
-const {  } = DI.resolve("ProfileSideMenuController");
-
 const SideMenu = (props: SideMenuProps) => {
+  const {} = useProfileStore();
+  const { state } = DI.resolve("ProfileSideMenuController");
+  const profile = state.profile;
+  
+  if (!profile) {
+    return null;
+  }
+  
   return (
     <div className="side-menu">
-      {props.imageUrl && (
-        <img src={props.imageUrl} alt="Side menu" className="side-menu-image" />
+      {profile.imageUrl && (
+        <img
+          src={profile.imageUrl}
+          alt="Side menu"
+          className="side-menu-image"
+        />
       )}
-      <h2 className="side-menu-message">{props.message}</h2>
-      <p className="side-menu-description">{props.description}</p>
+      <h2 className="side-menu-message">{profile.title}</h2>
+      <p className="side-menu-description">{profile.description}</p>
       {props.availableYears && props.availableYears.length > 0 && (
         <div className="side-menu-years">
           <h3 className="side-menu-years-title">Blog Archieve</h3>
           <div className="side-menu-years-list">
             <button
-              className={`side-menu-year-button ${props.selectedYear === null ? 'active' : ''}`}
+              className={`side-menu-year-button ${
+                props.selectedYear === null ? "active" : ""
+              }`}
               onClick={() => props.onYearSelect?.(null)}
             >
               All
@@ -32,7 +42,9 @@ const SideMenu = (props: SideMenuProps) => {
             {props.availableYears.map((year) => (
               <button
                 key={year}
-                className={`side-menu-year-button ${props.selectedYear === year ? 'active' : ''}`}
+                className={`side-menu-year-button ${
+                  props.selectedYear === year ? "active" : ""
+                }`}
                 onClick={() => props.onYearSelect?.(year)}
               >
                 {year}

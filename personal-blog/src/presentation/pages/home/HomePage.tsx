@@ -182,9 +182,6 @@ const HomePage = () => {
         </div>
         <div className="sidebar-section">
           <SideMenu
-            imageUrl="https://picsum.photos/300/200?random=10"
-            message="Welcome to My Blog"
-            description="This is a personal blog where I share my thoughts and experiences. Feel free to explore the posts and discover interesting content."
             availableYears={availableYears}
             selectedYear={selectedYear}
             onYearSelect={actions.setSelectedYear}
