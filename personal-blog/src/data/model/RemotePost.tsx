@@ -5,4 +5,5 @@ export interface RemotePost {
   body: string;
   imageUrl: string;
   type: string;
+  recommendedPosts: RemotePost[];
 }

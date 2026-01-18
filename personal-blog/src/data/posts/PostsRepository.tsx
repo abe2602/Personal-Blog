@@ -57,7 +57,16 @@ export const getThoughtsPosts = async (): Promise<Post[]> => {
       remotePost.body,
       new Date(),
       remotePost.imageUrl,
-      remotePost.id
+      remotePost.id,
+      (remotePost.recommendedPosts || []).map((recPost) =>
+        new Post(
+          recPost.title,
+          recPost.body,
+          new Date(),
+          recPost.imageUrl,
+          recPost.id
+        )
+      )
     );
   });
 };
@@ -70,7 +79,16 @@ export const getPost = async (id: number): Promise<Post> => {
     remotePost.body,
     new Date(),
     remotePost.imageUrl,
-    remotePost.id
+    remotePost.id,
+    (remotePost.recommendedPosts || []).map((recPost) =>
+      new Post(
+        recPost.title,
+        recPost.body,
+        new Date(),
+        recPost.imageUrl,
+        recPost.id
+      )
+    )
   );
   return post;
 };

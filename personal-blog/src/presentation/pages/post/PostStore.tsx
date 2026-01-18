@@ -36,8 +36,6 @@ export const usePostStore = create<PostState>()(
             post.id
           );
           state.setLoading(false);
-        } else {
-          state.setLoading(false);
         }
       },
     }
