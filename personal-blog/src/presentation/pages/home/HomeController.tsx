@@ -4,7 +4,8 @@ import { usePostsStore } from "./HomeStore";
 import { useProfileStore } from "../../components/profile_sidemenu/ProfileSideMenuStore";
 
 export default function HomeController({
-  postsRepository, profileRepository
+  postsRepository,
+  profileRepository,
 }: {
   postsRepository: typeof PostsRemoteRepository;
   profileRepository: typeof ProfileRemoteRepository;
@@ -12,22 +13,25 @@ export default function HomeController({
   const store = usePostsStore.getState();
   const profileStore = useProfileStore.getState();
 
-  async function getPosts() {  
+  async function getPosts() {
     if (store.posts.length > 0 && !store.isLoading && profileStore.profile) {
       return;
     }
 
     store.setLoading(true);
 
-
     try {
-      const postList = await postsRepository.getPosts();
-      const profile = await profileRepository.getProfile();
+      if (store.posts.length == 0 && store.isLoading) {
+        const postList = await postsRepository.getThoughtsPosts();
+        store.setPosts(postList);
+      }
 
-      profileStore.setProfile(profile)
-      profileStore.setError(null)
+      if (!profileStore.profile) {
+        const profile = await profileRepository.getProfile();
+        profileStore.setProfile(profile);
+      }
 
-      store.setPosts(postList);
+      profileStore.setError(null);
       store.setError(null);
       store.setCurrentPage(1);
     } catch (error) {
@@ -48,7 +52,7 @@ export default function HomeController({
   function setCurrentPage(page: number) {
     store.setCurrentPage(page);
     store.setScrollPosition(0);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function getState() {
@@ -56,12 +60,16 @@ export default function HomeController({
       const matchesSearch = post.title
         .toLocaleLowerCase()
         .includes(store.searchTerm.toLocaleLowerCase());
-      const matchesYear = store.selectedYear === null || 
+      const matchesYear =
+        store.selectedYear === null ||
         post.date.getFullYear() === store.selectedYear;
       return matchesSearch && matchesYear;
     });
 
-    const totalPages = Math.max(1, Math.ceil(filteredPosts.length / store.postsPerPage));
+    const totalPages = Math.max(
+      1,
+      Math.ceil(filteredPosts.length / store.postsPerPage)
+    );
     const startIndex = (store.currentPage - 1) * store.postsPerPage;
     const endIndex = startIndex + store.postsPerPage;
     const paginatedPosts = filteredPosts.slice(startIndex, endIndex);

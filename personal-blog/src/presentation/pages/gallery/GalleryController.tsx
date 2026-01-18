@@ -1,24 +1,37 @@
 import * as PostsRemoteRepository from "../../../data/posts/PostsRepository";
+import * as ProfileRemoteRepository from "../../../data/profile/ProfileRepository";
 import { useGalleryStore } from "./GalleryStore";
+import { useProfileStore } from "../../components/profile_sidemenu/ProfileSideMenuStore";
 
 export default function GalleryController({
   postsRepository,
+  profileRepository,
 }: {
   postsRepository: typeof PostsRemoteRepository;
+  profileRepository: typeof ProfileRemoteRepository;
 }) {
   const store = useGalleryStore.getState();
+  const profileStore = useProfileStore.getState();
 
   async function getPosts() {
-    if (store.posts.length > 0) {
-      store.setLoading(false);
+    if (store.posts.length > 0 && !store.isLoading && profileStore.profile) {
       return;
     }
 
     store.setLoading(true);
 
     try {
-      const postList = await postsRepository.getArtPosts();
-      store.setPosts(postList);
+      if (store.posts.length == 0 && store.isLoading) {
+        const postList = await postsRepository.getThoughtsPosts();
+        store.setPosts(postList);
+      }
+      
+      if (!profileStore.profile) {
+        const profile = await profileRepository.getProfile();
+        profileStore.setProfile(profile);
+      }
+
+      profileStore.setError(null);
       store.setError(null);
     } catch (error) {
       store.setError(error instanceof Error ? error.message : "Unknown error");
@@ -52,4 +65,3 @@ export default function GalleryController({
     state,
   };
 }
-
