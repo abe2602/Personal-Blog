@@ -233,6 +233,50 @@ body {
   margin-bottom: 15px;
 }
 
+.side-menu-years {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.side-menu-years-title {
+  color: #1A1A1A;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.side-menu-years-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.side-menu-year-button {
+  padding: 8px 12px;
+  border: 1px solid #E0E0E0;
+  background-color: #FFFFFF;
+  color: #1A1A1A;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s;
+  text-align: left;
+  width: 100%;
+}
+
+.side-menu-year-button:hover {
+  background-color: #F5F5F5;
+  border-color: #2563EB;
+  color: #2563EB;
+}
+
+.side-menu-year-button.active {
+  background-color: #2563EB;
+  color: #FFFFFF;
+  border-color: #2563EB;
+}
+
 .search-input-container {
   position: relative;
   display: block;

@@ -8,6 +8,7 @@ interface PostsState {
   error: string | null;
   scrollPosition: number;
   searchTerm: string;
+  selectedYear: number | null;
   currentPage: number;
   postsPerPage: number;
   setPosts: (posts: Post[]) => void;
@@ -15,6 +16,7 @@ interface PostsState {
   setError: (error: string | null) => void;
   setScrollPosition: (scrollPosition: number) => void;
   setSearchTerm: (searchTerm: string) => void;
+  setSelectedYear: (year: number | null) => void;
   setCurrentPage: (page: number) => void;
 }
 
@@ -26,6 +28,7 @@ export const usePostsStore = create<PostsState>()(
       error: null,
       scrollPosition: 0,
       searchTerm: "",
+      selectedYear: null,
       currentPage: 1,
       postsPerPage: 40,
       setPosts: (posts) => set({ posts, isLoading: false }),
@@ -33,6 +36,7 @@ export const usePostsStore = create<PostsState>()(
       setError: (error) => set({ error }),
       setScrollPosition: (scrollPosition) => set({ scrollPosition }),
       setSearchTerm: (searchTerm) => set({ searchTerm, currentPage: 1 }),
+      setSelectedYear: (year) => set({ selectedYear: year, currentPage: 1 }),
       setCurrentPage: (page) => set({ currentPage: page }),
     }),
     {
@@ -42,6 +46,7 @@ export const usePostsStore = create<PostsState>()(
         posts: state.posts,
         scrollPosition: state.scrollPosition,
         searchTerm: state.searchTerm,
+        selectedYear: state.selectedYear,
         currentPage: state.currentPage,
       }),
       onRehydrateStorage: () => (state) => {

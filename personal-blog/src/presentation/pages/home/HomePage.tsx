@@ -15,17 +15,26 @@ const HomePage = () => {
   const storePosts = usePostsStore((state) => state.posts);
   const isLoading = usePostsStore((state) => state.isLoading);
   const searchTerm = usePostsStore((state) => state.searchTerm);
+  const selectedYear = usePostsStore((state) => state.selectedYear);
   const error = usePostsStore((state) => state.error);
   const currentPage = usePostsStore((state) => state.currentPage);
   const postsPerPage = usePostsStore((state) => state.postsPerPage);
   const { setScrollPosition, scrollPosition } = usePostsStore();
 
+  // Get unique years from posts
+  const availableYears = Array.from(
+    new Set(storePosts.map((post) => post.date.getFullYear()))
+  ).sort((a, b) => b - a);
+
   // Compute pagination from store state
-  const filteredPosts = storePosts.filter((post) =>
-    post.title
+  const filteredPosts = storePosts.filter((post) => {
+    const matchesSearch = post.title
       .toLocaleLowerCase()
-      .includes(searchTerm.toLocaleLowerCase())
-  );
+      .includes(searchTerm.toLocaleLowerCase());
+    const matchesYear = selectedYear === null || 
+      post.date.getFullYear() === selectedYear;
+    return matchesSearch && matchesYear;
+  });
 
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / postsPerPage));
   const startIndex = (currentPage - 1) * postsPerPage;
@@ -176,6 +185,9 @@ const HomePage = () => {
             imageUrl="https://picsum.photos/300/200?random=10"
             message="Welcome to My Blog"
             description="This is a personal blog where I share my thoughts and experiences. Feel free to explore the posts and discover interesting content."
+            availableYears={availableYears}
+            selectedYear={selectedYear}
+            onYearSelect={actions.setSelectedYear}
           />
         </div>
       </div>

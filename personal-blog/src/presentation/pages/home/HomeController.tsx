@@ -32,6 +32,11 @@ export default function HomeController({
     store.setSearchTerm(searchTerm);
   }
 
+  function setSelectedYear(year: number | null) {
+    const store = usePostsStore.getState();
+    store.setSelectedYear(year);
+  }
+
   function setCurrentPage(page: number) {
     const store = usePostsStore.getState();
     store.setCurrentPage(page);
@@ -42,11 +47,14 @@ export default function HomeController({
   // Create a getter function that always gets fresh state
   function getState() {
     const store = usePostsStore.getState();
-    const filteredPosts = store.posts.filter((post) =>
-      post.title
+    const filteredPosts = store.posts.filter((post) => {
+      const matchesSearch = post.title
         .toLocaleLowerCase()
-        .includes(store.searchTerm.toLocaleLowerCase())
-    );
+        .includes(store.searchTerm.toLocaleLowerCase());
+      const matchesYear = store.selectedYear === null || 
+        post.date.getFullYear() === store.selectedYear;
+      return matchesSearch && matchesYear;
+    });
 
     const totalPages = Math.max(1, Math.ceil(filteredPosts.length / store.postsPerPage));
     const startIndex = (store.currentPage - 1) * store.postsPerPage;
@@ -70,6 +78,7 @@ export default function HomeController({
   const actions = {
     getPosts: getPosts,
     setSearchTerm: setSearchTerm,
+    setSelectedYear: setSelectedYear,
     setCurrentPage: setCurrentPage,
   };
 
