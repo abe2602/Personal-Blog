@@ -13,10 +13,26 @@ class PostsDataSourceImpl(
 ) : PostsDataSource {
     private val collection = database.getCollection<DatabasePost>(COLLECTION_NAME)
 
-    override suspend fun getPostsList(type: String?): List<DatabasePost> {
+    override suspend fun getPostsList(
+        type: String?,
+        page: Int?,
+        pageSize: Int,
+    ): List<DatabasePost> {
         return try {
+            val mongoCollection = (type?.let {
+                collection
+                    .find(Filters.eq("type", it))
+            } ?: collection.find())
+
+            page?.let {
+                mongoCollection
+            } ?: run {
+                mongoCollection
+            }.toList()
+
             val mongoList = (type?.let {
-                collection.find(Filters.eq("type", it))
+                collection
+                    .find(Filters.eq("type", it))
             } ?: collection.find()).toList()
 
             mongoList

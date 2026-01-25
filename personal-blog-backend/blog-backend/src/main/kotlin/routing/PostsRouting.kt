@@ -15,7 +15,11 @@ fun Route.getPostsRouting() {
     val getPost by injection<GetPost>()
 
     get("/posts") {
-        call.respond(getPostsList())
+        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
+        val page = call.parameters["offset"]?.toIntOrNull()
+        val result = getPostsList(pageSize = pageSize, page = page)
+
+        call.respond(result)
     }
 
     get("/post/{id}") {
@@ -26,7 +30,7 @@ fun Route.getPostsRouting() {
             return@get
         }
 
-        getPost(id = id) ?.let {
+        getPost(id = id)?.let {
             call.respond(it)
         } ?: run {
             call.respond(HttpStatusCode.NotFound, "Post not found")
@@ -34,15 +38,38 @@ fun Route.getPostsRouting() {
     }
 
     get("/favorites") {
-        call.respond(getPostsList(PostType.FAVORITE_CONTENT))
+        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
+        val page = call.parameters["offset"]?.toIntOrNull()
+        val result = getPostsList(
+            type = PostType.THOUGHTS,
+            pageSize = pageSize,
+            page = page
+        )
+
+        call.respond(result)
     }
 
     get("/gallery") {
+        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
+        val page = call.parameters["offset"]?.toIntOrNull()
+        val result = getPostsList(
+            type = PostType.MEDIA,
+            pageSize = pageSize,
+            page = page
+        )
 
-        call.respond(getPostsList(PostType.MEDIA))
+        call.respond(result)
     }
 
     get("/thoughts") {
-        call.respond(getPostsList(PostType.THOUGHTS))
+        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
+        val page = call.parameters["offset"]?.toIntOrNull()
+        val result = getPostsList(
+            type = PostType.THOUGHTS,
+            pageSize = pageSize,
+            page = page
+        )
+
+        call.respond(result)
     }
 }

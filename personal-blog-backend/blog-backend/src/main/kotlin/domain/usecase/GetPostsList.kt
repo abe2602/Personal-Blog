@@ -7,7 +7,15 @@ import org.example.domain.repository.PostsRepository
 class GetPostsList(
     private val repository: PostsRepository
 ) {
-    operator fun invoke(type: PostType? = null) = runBlocking {
-        repository.getPostsList(type)
+    operator fun invoke(
+        type: PostType? = null,
+        page: Int?,
+        pageSize: Int
+    ) = runBlocking {
+        repository.getPostsList(
+            type = type,
+            page = page,
+            pageSize = pageSize
+        )
     }
 }
