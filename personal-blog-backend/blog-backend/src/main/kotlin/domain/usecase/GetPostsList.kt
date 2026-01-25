@@ -8,13 +8,6 @@ class GetPostsList(
     private val repository: PostsRepository
 ) {
     operator fun invoke(type: PostType? = null) = runBlocking {
-        repository.getAllPosts()
-            .filter {
-                if(type == null) {
-                    true
-                } else {
-                    it.type == type
-                }
-            }
+        repository.getPostsList(type)
     }
 }

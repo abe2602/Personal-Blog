@@ -10,16 +10,13 @@ import org.example.data.posts.toDomain
 class PostsRepositoryImpl(
     private val dataSource: PostsDataSource
 ) : PostsRepository {
-    override suspend fun getAllPosts(): List<Post>  {
-        return dataSource.getPostsList(type = null).map { it.toDomain() }
-    }
-    
-    override suspend fun getPostById(id: Int): Post?  {
-        return dataSource.getPost(id).firstOrNull()?.toDomain()
-    }
-    
-    override suspend fun getPostsByType(type: PostType): List<Post>  {
-        val databaseType = type.toDatabaseType()
+    override suspend fun getPostsList(type: PostType?): List<Post> {
+        val databaseType = type?.toDatabaseType()
+
         return dataSource.getPostsList(type = databaseType).map { it.toDomain() }
+    }
+
+    override suspend fun getPostById(id: Int): Post? {
+        return dataSource.getPost(id)?.toDomain()
     }
 }

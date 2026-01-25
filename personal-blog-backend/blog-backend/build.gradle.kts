@@ -23,7 +23,10 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.5.6")
     implementation("io.insert-koin:koin-ktor:3.5.6")
     implementation("io.insert-koin:koin-logger-slf4j:3.5.6")
-    
+
+    // MongoDB
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:5.0.0")
+
     testImplementation("io.ktor:ktor-server-tests:2.3.0")
 }
 

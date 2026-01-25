@@ -4,7 +4,6 @@ import org.example.domain.model.Post
 import org.example.domain.model.PostType
 
 interface PostsRepository {
-    suspend fun getAllPosts(): List<Post>
+    suspend fun getPostsList(type: PostType?): List<Post>
     suspend fun getPostById(id: Int): Post?
-    suspend fun getPostsByType(type: PostType): List<Post>
 }

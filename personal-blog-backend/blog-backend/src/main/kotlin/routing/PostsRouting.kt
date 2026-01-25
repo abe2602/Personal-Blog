@@ -39,6 +39,7 @@ fun Route.getPostsRouting() {
     }
 
     get("/gallery") {
+
         call.respond(getPostsList(PostType.MEDIA))
     }
 

@@ -15,29 +15,25 @@ class PostsDataSourceImpl(
     database: MongoDatabase
 ) : PostsDataSource {
     private val collection = database.getCollection<MongoPostDocument>(COLLECTION_NAME)
-    private val postsList = mutableListOf<DatabasePost>()
 
     override suspend fun getPostsList(type: DatabasePostType?): List<DatabasePost> {
         return try {
-            if (postsList.isEmpty()) {
-                val mongoList = collection.find().toList().map { it.toDatabasePost() }
-                postsList.addAll(mongoList)
-            }
+            val mongoList = (type?.let {
+                collection.find(Filters.eq("type", it.name))
+            } ?: collection.find()).toList()
 
-            postsList
+            mongoList.map { it.toDatabasePost() }
         } catch (_: Exception) {
             emptyList()
         }
     }
 
-    override suspend fun getPost(id: Int): List<DatabasePost> {
+    override suspend fun getPost(id: Int): DatabasePost? {
         return try {
-            val document = collection.find(Filters.eq("_id", id)).firstOrNull()
-            if (document != null) {
-                listOf(document.toDatabasePost())
-            } else {
-                emptyList()
-            }
+            collection
+                .find(Filters.eq("_id", id))
+                .firstOrNull()
+                ?.toDatabasePost()
         } catch (e: Exception) {
             throw e
         }
