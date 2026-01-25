@@ -1,7 +1,6 @@
 package org.example.data.posts
 
 import org.example.data.posts.model.DatabasePost
-import org.example.data.posts.model.DatabasePostType
 import org.example.domain.model.Post
 import org.example.domain.model.PostType
 
@@ -12,23 +11,23 @@ fun DatabasePost.toDomain(): Post {
         title = title,
         body = body,
         imageUrl = imageUrl,
-        type = type.toDomainType(),
-        recommendedPosts = recommendedPosts.map { it.toDomain() }
+        type = type.toDomain(),
+        recommendedPosts = emptyList() // come back here later
     )
 }
 
-fun DatabasePostType.toDomainType(): PostType {
+fun PostType.toDatabaseType(): String {
     return when (this) {
-        DatabasePostType.THOUGHTS -> PostType.THOUGHTS
-        DatabasePostType.FAVORITE_CONTENT -> PostType.FAVORITE_CONTENT
-        DatabasePostType.MEDIA -> PostType.MEDIA
+        PostType.THOUGHTS -> "THOUGHTS"
+        PostType.FAVORITE_CONTENT -> "FAVORITE_CONTENT"
+        PostType.MEDIA -> "MEDIA"
     }
 }
 
-fun PostType.toDatabaseType(): DatabasePostType {
+fun String.toDomain(): PostType {
     return when (this) {
-        PostType.THOUGHTS -> DatabasePostType.THOUGHTS
-        PostType.FAVORITE_CONTENT -> DatabasePostType.FAVORITE_CONTENT
-        PostType.MEDIA -> DatabasePostType.MEDIA
+        "THOUGHTS" -> PostType.THOUGHTS
+        "FAVORITE_CONTENT" -> PostType.FAVORITE_CONTENT
+        else -> PostType.MEDIA
     }
 }

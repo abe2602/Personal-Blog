@@ -8,7 +8,6 @@ import org.example.di.injection
 import org.example.domain.model.PostType
 import org.example.domain.usecase.GetPost
 import org.example.domain.usecase.GetPostsList
-import org.koin.ktor.ext.inject
 import kotlin.text.toIntOrNull
 
 fun Route.getPostsRouting() {
