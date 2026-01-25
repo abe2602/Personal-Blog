@@ -9,10 +9,15 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
 import org.example.data.di.dataModule
 import org.example.di.appModule
+import org.example.domain.usecase.GetPost
+import org.example.domain.usecase.GetPostsList
 import org.example.routing.getPostsRouting
 import org.example.routing.getProfileRouting
+import org.koin.java.KoinJavaComponent.inject
+import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
+import kotlin.getValue
 
 
 fun main() {
@@ -25,8 +30,7 @@ fun main() {
 fun Application.configureKoin() {
     install(Koin) {
         slf4jLogger()
-        modules(dataModule)
-        modules(appModule)
+        modules(dataModule, appModule)
     }
 }
 
@@ -38,7 +42,7 @@ fun Application.configureRouting() {
             ignoreUnknownKeys = true
         })
     }
-    
+
     routing {
         getPostsRouting()
         getProfileRouting()

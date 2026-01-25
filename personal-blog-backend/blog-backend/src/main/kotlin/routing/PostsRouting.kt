@@ -4,6 +4,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
+import org.example.di.injection
 import org.example.domain.model.PostType
 import org.example.domain.usecase.GetPost
 import org.example.domain.usecase.GetPostsList
@@ -11,8 +12,8 @@ import org.koin.ktor.ext.inject
 import kotlin.text.toIntOrNull
 
 fun Route.getPostsRouting() {
-    val getPostsList by inject<GetPostsList>()
-    val getPost by inject<GetPost>()
+    val getPostsList by injection<GetPostsList>()
+    val getPost by injection<GetPost>()
 
     get("/posts") {
         call.respond(getPostsList())
