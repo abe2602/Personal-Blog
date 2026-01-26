@@ -1,11 +1,11 @@
 import { apiClient } from "../RestApi";
-import { RemotePost } from "./model/RemotePost";
+import { RemotePost, PostsListing } from "./model/RemotePost";
 import { Post } from "../../domain/model/Post";
 
-export const getPosts = async (): Promise<Post[]> => {
-  const response = await apiClient.get<RemotePost[]>("posts");
+export const getPosts = async (): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("posts");
   console.log(response);
-  return response.data.map((remotePost: RemotePost) => {
+  const posts = response.data.postList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
@@ -15,6 +15,10 @@ export const getPosts = async (): Promise<Post[]> => {
       remotePost.id
     );
   });
+  return {
+    posts,
+    total: response.data.total,
+  };
 };
 
 export const getFavoriteMediaPosts = async (): Promise<Post[]> => {

@@ -7,3 +7,8 @@ export interface RemotePost {
   type: string;
   recommendedPosts: RemotePost[];
 }
+
+export interface PostsListing {
+  postList: RemotePost[];
+  total: number;
+}

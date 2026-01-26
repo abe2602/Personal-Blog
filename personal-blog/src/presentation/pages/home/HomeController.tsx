@@ -22,8 +22,9 @@ export default function HomeController({
 
     try {
       if (store.posts.length == 0 && store.isLoading) {
-        const postList = await postsRepository.getThoughtsPosts();
-        store.setPosts(postList);
+        const postsListing = await postsRepository.getPosts();
+        store.setTotalPosts(postsListing.total);
+        store.setPosts(postsListing.posts);
       }
 
       if (!profileStore.profile) {
@@ -66,10 +67,7 @@ export default function HomeController({
       return matchesSearch && matchesYear;
     });
 
-    const totalPages = Math.max(
-      1,
-      Math.ceil(filteredPosts.length / store.postsPerPage)
-    );
+    const totalPages = store.totalPosts;
     const startIndex = (store.currentPage - 1) * store.postsPerPage;
     const endIndex = startIndex + store.postsPerPage;
     const paginatedPosts = filteredPosts.slice(startIndex, endIndex);

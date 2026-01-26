@@ -21,7 +21,7 @@ export default function FavoritesController({
 
     try {
       if (store.posts.length == 0 && store.isLoading) {
-        const postList = await postsRepository.getThoughtsPosts();
+        const postList = await postsRepository.getFavoriteMediaPosts();
         store.setPosts(postList);
       }
 

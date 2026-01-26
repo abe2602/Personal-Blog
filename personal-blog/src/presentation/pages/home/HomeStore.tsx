@@ -11,6 +11,7 @@ interface PostsState {
   selectedYear: number | null;
   currentPage: number;
   postsPerPage: number;
+  totalPosts: number;
   setPosts: (posts: Post[]) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
@@ -18,6 +19,7 @@ interface PostsState {
   setSearchTerm: (searchTerm: string) => void;
   setSelectedYear: (year: number | null) => void;
   setCurrentPage: (page: number) => void;
+  setTotalPosts: (total: number) => void;
 }
 
 export const usePostsStore = create<PostsState>()(
@@ -30,7 +32,8 @@ export const usePostsStore = create<PostsState>()(
       searchTerm: "",
       selectedYear: null,
       currentPage: 1,
-      postsPerPage: 6,
+      postsPerPage: 10,
+      totalPosts: 0,
       setPosts: (posts) => set({ posts, isLoading: false }),
       setLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),
@@ -38,6 +41,7 @@ export const usePostsStore = create<PostsState>()(
       setSearchTerm: (searchTerm) => set({ searchTerm, currentPage: 1 }),
       setSelectedYear: (year) => set({ selectedYear: year, currentPage: 1 }),
       setCurrentPage: (page) => set({ currentPage: page }),
+      setTotalPosts: (total) => set({ totalPosts: total }),
     }),
     {
       name: "posts-storage",
