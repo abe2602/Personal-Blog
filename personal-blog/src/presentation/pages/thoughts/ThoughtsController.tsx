@@ -14,14 +14,14 @@ export default function ThoughtsController({
   const profileStore = useProfileStore.getState();
 
   async function getPosts() {
-    if (store.posts.length > 0 && !store.isLoading && profileStore.profile) {
+    if (store.posts.length > 0 && !store.isLoading && profileStore.profile && store.totalPosts > 0) {
       return;
     }
 
     store.setLoading(true);
 
     try {
-      if (store.posts.length == 0 && store.isLoading) {
+      if (store.posts.length == 0 || store.totalPosts === 0) {
         const postsListing = await postsRepository.getThoughtsPosts();
         store.setTotalPosts(postsListing.total);
         store.setPosts(postsListing.posts);
@@ -33,8 +33,6 @@ export default function ThoughtsController({
       }
 
       profileStore.setError(null);
-      store.setError(null);
-      store.setCurrentPage(1);
     } catch (error) {
       store.setError(error instanceof Error ? error.message : "Unknown error");
     } finally {

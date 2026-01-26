@@ -13,14 +13,14 @@ export default function FavoritesController({
     const profileStore = useProfileStore.getState();
 
   async function getPosts() {
-    if (store.posts.length > 0 && !store.isLoading && profileStore.profile) {
+    if (store.posts.length > 0 && !store.isLoading && profileStore.profile && store.totalPosts > 0) {
       return;
     }
 
     store.setLoading(true);
 
     try {
-      if (store.posts.length == 0 && store.isLoading) {
+      if (store.posts.length == 0 || store.totalPosts === 0) {
         const postsListing = await postsRepository.getFavoriteMediaPosts();
         store.setTotalPosts(postsListing.total);
         store.setPosts(postsListing.posts);
@@ -33,7 +33,6 @@ export default function FavoritesController({
 
       profileStore.setError(null);
       store.setError(null);
-      store.setCurrentPage(1);
     } catch (error) {
       store.setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
