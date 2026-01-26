@@ -67,7 +67,10 @@ export default function HomeController({
       return matchesSearch && matchesYear;
     });
 
-    const totalPages = store.totalPosts;
+    const totalPages = Math.max(
+      1,
+      Math.ceil(store.totalPosts / store.postsPerPage)
+    );
     const startIndex = (store.currentPage - 1) * store.postsPerPage;
     const endIndex = startIndex + store.postsPerPage;
     const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
