@@ -21,8 +21,9 @@ export default function FavoritesController({
 
     try {
       if (store.posts.length == 0 && store.isLoading) {
-        const postList = await postsRepository.getFavoriteMediaPosts();
-        store.setPosts(postList);
+        const postsListing = await postsRepository.getFavoriteMediaPosts();
+        store.setTotalPosts(postsListing.total);
+        store.setPosts(postsListing.posts);
       }
 
       if (!profileStore.profile) {
@@ -32,6 +33,7 @@ export default function FavoritesController({
 
       profileStore.setError(null);
       store.setError(null);
+      store.setCurrentPage(1);
     } catch (error) {
       store.setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
@@ -43,20 +45,45 @@ export default function FavoritesController({
     store.setSearchTerm(searchTerm);
   }
 
-  const state = {
-    posts: store.posts.filter((post) =>
+  function setCurrentPage(page: number) {
+    store.setCurrentPage(page);
+    store.setScrollPosition(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function getState() {
+    const filteredPosts = store.posts.filter((post) =>
       post.title
         .toLocaleLowerCase()
         .includes(store.searchTerm.toLocaleLowerCase())
-    ),
-    isLoading: store.isLoading,
-    error: store.error,
-    searchTerm: store.searchTerm,
-  };
+    );
+
+    const totalPages = Math.max(
+      1,
+      Math.ceil(store.totalPosts / store.postsPerPage)
+    );
+    const startIndex = (store.currentPage - 1) * store.postsPerPage;
+    const endIndex = startIndex + store.postsPerPage;
+    const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
+
+    return {
+      posts: paginatedPosts,
+      allPostsSize: filteredPosts.length,
+      isLoading: store.isLoading,
+      error: store.error,
+      searchTerm: store.searchTerm,
+      currentPage: store.currentPage,
+      totalPages: totalPages,
+      postsPerPage: store.postsPerPage,
+    };
+  }
+
+  const state = getState();
 
   const actions = {
     getPosts: getPosts,
     setSearchTerm: setSearchTerm,
+    setCurrentPage: setCurrentPage,
   };
 
   return {

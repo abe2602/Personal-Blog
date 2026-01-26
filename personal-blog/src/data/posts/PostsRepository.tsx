@@ -21,10 +21,10 @@ export const getPosts = async (): Promise<{ posts: Post[]; total: number }> => {
   };
 };
 
-export const getFavoriteMediaPosts = async (): Promise<Post[]> => {
-  const response = await apiClient.get<RemotePost[]>("favorites");
+export const getFavoriteMediaPosts = async (): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("favorites");
   console.log(response);
-  return response.data.map((remotePost: RemotePost) => {
+  const posts = response.data.postList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
@@ -34,12 +34,16 @@ export const getFavoriteMediaPosts = async (): Promise<Post[]> => {
       remotePost.id
     );
   });
+  return {
+    posts,
+    total: response.data.total,
+  };
 };
 
-export const getArtPosts = async (): Promise<Post[]> => {
-  const response = await apiClient.get<RemotePost[]>("gallery");
+export const getArtPosts = async (): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("gallery");
   console.log(response);
-  return response.data.map((remotePost: RemotePost) => {
+  const posts = response.data.postList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
@@ -49,12 +53,16 @@ export const getArtPosts = async (): Promise<Post[]> => {
       remotePost.id
     );
   });
+  return {
+    posts,
+    total: response.data.total,
+  };
 };
 
-export const getThoughtsPosts = async (): Promise<Post[]> => {
-  const response = await apiClient.get<RemotePost[]>("thoughts");
+export const getThoughtsPosts = async (): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("thoughts");
   console.log(response);
-  return response.data.map((remotePost: RemotePost) => {
+  const posts = response.data.postList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
@@ -73,6 +81,10 @@ export const getThoughtsPosts = async (): Promise<Post[]> => {
       )
     );
   });
+  return {
+    posts,
+    total: response.data.total,
+  };
 };
 
 export const getPost = async (id: number): Promise<Post> => {

@@ -20,21 +20,22 @@ const HomePage = () => {
   const selectedYear = state.selectedYear;
   const error = state.error;
   const currentPage = state.currentPage;
-  const postsPerPage = state.postsPerPage;
   const availableYears = state.availableYears;
   const totalPages = state.totalPages;
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
   
   useEffect(() => {
     actions.getPosts();
   }, []);
 
   useLayoutEffect(() => {
-    if (scrollPosition > 0 && !isLoading && posts.length > 0) {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [currentPage]);
+
+  useLayoutEffect(() => {
+    if (scrollPosition > 0 && !isLoading && posts.length > 0 && currentPage === 1) {
       window.scrollTo(0, scrollPosition);
     }
-  }, [isLoading, posts.length, scrollPosition]);
+  }, [isLoading, posts.length, scrollPosition, currentPage]);
 
   useEffect(() => {
     const handleScroll = () => {

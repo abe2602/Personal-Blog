@@ -8,11 +8,16 @@ interface FavoritesState {
   error: string | null;
   scrollPosition: number;
   searchTerm: string;
+  currentPage: number;
+  postsPerPage: number;
+  totalPosts: number;
   setPosts: (posts: Post[]) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   setScrollPosition: (scrollPosition: number) => void;
   setSearchTerm: (searchTerm: string) => void;
+  setCurrentPage: (page: number) => void;
+  setTotalPosts: (total: number) => void;
 }
 
 export const useFavoritesStore = create<FavoritesState>()(
@@ -23,16 +28,21 @@ export const useFavoritesStore = create<FavoritesState>()(
       error: null,
       scrollPosition: 0,
       searchTerm: "",
+      currentPage: 1,
+      postsPerPage: 10,
+      totalPosts: 0,
       setPosts: (posts) => set({ posts, isLoading: false }),
       setLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),
       setScrollPosition: (scrollPosition) => set({ scrollPosition }),
-      setSearchTerm: (searchTerm) => set({ searchTerm }),
+      setSearchTerm: (searchTerm) => set({ searchTerm, currentPage: 1 }),
+      setCurrentPage: (page) => set({ currentPage: page }),
+      setTotalPosts: (total) => set({ totalPosts: total }),
     }),
     {
       name: 'favorites-storage',
       storage: createJSONStorage(() => sessionStorage),
-      partialize: (state) => ({ posts: state.posts, scrollPosition: state.scrollPosition, searchTerm: state.searchTerm }),
+      partialize: (state) => ({ posts: state.posts, scrollPosition: state.scrollPosition, searchTerm: state.searchTerm, currentPage: state.currentPage }),
       onRehydrateStorage: () => (state) => {
         if (state?.posts && state.posts.length > 0) {
           state.posts = state.posts.map((post: any) => ({
