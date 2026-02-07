@@ -15,7 +15,7 @@ export const getPosts = async (
     return new Post(
       remotePost.title,
       remotePost.body,
-      new Date(),
+      new Date(remotePost.creationDate),
       remotePost.imageUrl,
       remotePost.id
     );
@@ -34,11 +34,10 @@ export const getFavoriteMediaPosts = async (
     params: { limit: limit, page: page },
   });
   const posts = response.data.postsList.map((remotePost: RemotePost) => {
- 
     return new Post(
       remotePost.title,
       remotePost.body,
-      new Date(),
+      new Date(remotePost.creationDate),
       remotePost.imageUrl,
       remotePost.id
     );
@@ -61,7 +60,7 @@ export const getArtPosts = async (
     return new Post(
       remotePost.title,
       remotePost.body,
-      new Date(),
+      new Date(remotePost.creationDate),
       remotePost.imageUrl,
       remotePost.id
     );
@@ -84,14 +83,14 @@ export const getThoughtsPosts = async (
     return new Post(
       remotePost.title,
       remotePost.body,
-      new Date(),
+      new Date(remotePost.creationDate),
       remotePost.imageUrl,
       remotePost.id,
       (remotePost.recommendedPosts || []).map((recPost) =>
         new Post(
           recPost.title,
           recPost.body,
-          new Date(),
+          new Date(recPost.creationDate),
           recPost.imageUrl,
           recPost.id
         )
@@ -116,7 +115,7 @@ export const searchPosts = async (query: string): Promise<Post[]> => {
     return new Post(
       remotePost.title,
       remotePost.body,
-      new Date(),
+      new Date(remotePost.creationDate),
       remotePost.imageUrl,
       remotePost.id
     );
@@ -129,14 +128,14 @@ export const getPost = async (id: number): Promise<Post> => {
   const post = new Post(
     remotePost.title,
     remotePost.body,
-    new Date(),
+    new Date(remotePost.creationDate),
     remotePost.imageUrl,
     remotePost.id,
     (remotePost.recommendedPosts || []).map((recPost) =>
       new Post(
         recPost.title,
         recPost.body,
-        new Date(),
+        new Date(recPost.creationDate),
         recPost.imageUrl,
         recPost.id
       )

@@ -5,6 +5,7 @@ export interface RemotePost {
   body: string;
   imageUrl: string;
   type: string;
+  creationDate: string; // yyyy-mm-ddThh:mm or similar
   recommendedPosts: RemotePost[];
 }
 
