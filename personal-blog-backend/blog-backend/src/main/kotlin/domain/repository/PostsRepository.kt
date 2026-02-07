@@ -14,6 +14,4 @@ interface PostsRepository {
     ): PostsListing
 
     suspend fun getPostById(id: Int): Post?
-
-    suspend fun searchPosts(query: String): List<Post>
 }

@@ -66,23 +66,4 @@ class PostsDataSourceImpl(
             throw e
         }
     }
-
-    override suspend fun searchPosts(query: String): List<DatabasePost> {
-        if (query.isBlank()) return emptyList()
-        return try {
-            val filter = searchFilter(query)
-            collection.find(filter).toList()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
-
-    private fun searchFilter(query: String): Bson {
-        val pattern = ".*${Regex.escape(query)}.*"
-        val regexOption = "i"
-        return Filters.or(
-            Filters.regex("title", pattern, regexOption)
-        )
-    }
 }

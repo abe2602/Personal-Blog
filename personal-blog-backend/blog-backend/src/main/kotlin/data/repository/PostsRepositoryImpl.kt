@@ -33,10 +33,6 @@ class PostsRepositoryImpl(
         return dataSource.getPost(id)?.toDomain()
     }
 
-    override suspend fun searchPosts(query: String): List<Post> {
-        return dataSource.searchPosts(query).map { it.toDomain() }
-    }
-
     private suspend fun countPosts(type: PostType?, title: String? = null): Int {
         return dataSource.countPosts(type?.toDatabaseType(), title)
     }

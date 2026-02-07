@@ -8,28 +8,16 @@ import org.example.di.injection
 import org.example.domain.model.PostType
 import org.example.domain.usecase.GetPost
 import org.example.domain.usecase.GetPostsList
-import org.example.domain.usecase.SearchPosts
 import kotlin.text.toIntOrNull
 
 fun Route.getPostsRouting() {
     val getPostsList by injection<GetPostsList>()
     val getPost by injection<GetPost>()
-    val searchPosts by injection<SearchPosts>()
-
-    get("/posts/search") {
-        val query = call.parameters["searchQuery"]?.trim()
-        if (query.isNullOrBlank()) {
-            call.respond(HttpStatusCode.BadRequest, "Search query 'q' is required")
-            return@get
-        }
-        val result = searchPosts(query = query)
-        call.respond(result)
-    }
 
     get("/posts") {
         val pageSize = call.parameters["limit"]?.toIntOrNull() ?: 20
         val page = call.parameters["page"]?.toIntOrNull()
-        val title = call.parameters["searchQuery"]?.trim()?.takeIf { it.isNotBlank() }
+        val title = call.parameters["title"]?.trim()?.takeIf { it.isNotBlank() }
         val result = getPostsList(pageSize = pageSize, page = page, title = title)
 
         call.respond(result)
