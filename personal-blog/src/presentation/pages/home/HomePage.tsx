@@ -171,7 +171,10 @@ const HomePage = () => {
           <SearchInput
             onChangeCallback={actions.setSearchTerm}
             value={searchTerm}
-            onSearchClick={() => navigate(`/search?q=${encodeURIComponent(searchTerm)}`)}
+            onSearchClick={() => {
+            navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+            actions.setSearchTerm("");
+          }}
           />
           <ul>
             {posts.map((post: Post, index: number) => (
