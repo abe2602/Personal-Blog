@@ -17,7 +17,7 @@ fun Route.getPostsRouting() {
     get("/posts") {
         val pageSize = call.parameters["limit"]?.toIntOrNull() ?: 20
         val page = call.parameters["page"]?.toIntOrNull()
-        val title = call.parameters["title"]?.trim()?.takeIf { it.isNotBlank() }
+        val title = call.parameters["searchQuery"]?.trim()?.takeIf { it.isNotBlank() }
         val result = getPostsList(pageSize = pageSize, page = page, title = title)
 
         call.respond(result)
