@@ -9,6 +9,6 @@ export interface RemotePost {
 }
 
 export interface PostsListing {
-  postList: RemotePost[];
+  postsList: RemotePost[];
   total: number;
 }

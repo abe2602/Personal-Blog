@@ -5,7 +5,7 @@ import { Post } from "../../domain/model/Post";
 export const getPosts = async (): Promise<{ posts: Post[]; total: number }> => {
   const response = await apiClient.get<PostsListing>("posts");
   console.log(response);
-  const posts = response.data.postList.map((remotePost: RemotePost) => {
+  const posts = response.data.postsList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
@@ -24,7 +24,7 @@ export const getPosts = async (): Promise<{ posts: Post[]; total: number }> => {
 export const getFavoriteMediaPosts = async (): Promise<{ posts: Post[]; total: number }> => {
   const response = await apiClient.get<PostsListing>("favorites");
   console.log(response);
-  const posts = response.data.postList.map((remotePost: RemotePost) => {
+  const posts = response.data.postsList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
@@ -43,7 +43,7 @@ export const getFavoriteMediaPosts = async (): Promise<{ posts: Post[]; total: n
 export const getArtPosts = async (): Promise<{ posts: Post[]; total: number }> => {
   const response = await apiClient.get<PostsListing>("gallery");
   console.log(response);
-  const posts = response.data.postList.map((remotePost: RemotePost) => {
+  const posts = response.data.postsList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
@@ -62,7 +62,7 @@ export const getArtPosts = async (): Promise<{ posts: Post[]; total: number }> =
 export const getThoughtsPosts = async (): Promise<{ posts: Post[]; total: number }> => {
   const response = await apiClient.get<PostsListing>("thoughts");
   console.log(response);
-  const posts = response.data.postList.map((remotePost: RemotePost) => {
+  const posts = response.data.postsList.map((remotePost: RemotePost) => {
     console.log(remotePost);
     return new Post(
       remotePost.title,
