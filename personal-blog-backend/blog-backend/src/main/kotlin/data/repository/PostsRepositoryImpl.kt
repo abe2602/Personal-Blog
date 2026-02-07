@@ -6,6 +6,7 @@ import org.example.domain.model.PostType
 import org.example.domain.repository.PostsRepository
 import org.example.data.posts.toDatabaseType
 import org.example.data.posts.toDomain
+import org.example.model.PostsListing
 
 class PostsRepositoryImpl(
     private val dataSource: PostsDataSource
@@ -14,16 +15,23 @@ class PostsRepositoryImpl(
         type: PostType?,
         page: Int?,
         pageSize: Int,
-    ): List<Post> {
+    ): PostsListing {
         val databaseType = type?.toDatabaseType()
-
-        return dataSource.getPostsList(
-            type = databaseType, pageSize = pageSize,
+        val posts = dataSource.getPostsList(
+            type = databaseType,
+            pageSize = pageSize,
             page = page
         ).map { it.toDomain() }
+        val total = countPosts(type = null)
+
+        return PostsListing(postsList = posts, total = total)
     }
 
     override suspend fun getPostById(id: Int): Post? {
         return dataSource.getPost(id)?.toDomain()
+    }
+
+    private suspend fun countPosts(type: PostType?): Int {
+        return dataSource.countPosts(type?.toDatabaseType())
     }
 }

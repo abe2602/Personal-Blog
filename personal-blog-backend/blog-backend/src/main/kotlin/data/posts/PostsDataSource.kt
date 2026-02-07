@@ -10,5 +10,7 @@ interface PostsDataSource {
         pageSize: Int,
     ): List<DatabasePost>
 
+    suspend fun countPosts(type: String?): Int
+
     suspend fun getPost(id: Int): DatabasePost?
 }

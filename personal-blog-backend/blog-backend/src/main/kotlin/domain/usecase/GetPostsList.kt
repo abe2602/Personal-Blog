@@ -3,6 +3,7 @@ package org.example.domain.usecase
 import kotlinx.coroutines.runBlocking
 import org.example.domain.model.PostType
 import org.example.domain.repository.PostsRepository
+import org.example.model.PostsListing
 
 class GetPostsList(
     private val repository: PostsRepository
@@ -11,11 +12,7 @@ class GetPostsList(
         type: PostType? = null,
         page: Int?,
         pageSize: Int
-    ) = runBlocking {
-        repository.getPostsList(
-            type = type,
-            page = page,
-            pageSize = pageSize
-        )
+    ): PostsListing = runBlocking {
+        repository.getPostsList(type = type, page = page, pageSize = pageSize)
     }
 }

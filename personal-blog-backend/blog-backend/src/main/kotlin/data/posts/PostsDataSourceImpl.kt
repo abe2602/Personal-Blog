@@ -19,25 +19,31 @@ class PostsDataSourceImpl(
         pageSize: Int,
     ): List<DatabasePost> {
         return try {
-            val mongoCollection = (type?.let {
-                collection
-                    .find(Filters.eq("type", it))
-            } ?: collection.find())
+            val query = type?.let {
+                collection.find(Filters.eq("type", it))
+            } ?: collection.find()
 
-            page?.let {
-                mongoCollection
-            } ?: run {
-                mongoCollection
-            }.toList()
+            val paginatedQuery = page?.let {
+                val skip = (it - 1).coerceAtLeast(0) * pageSize
+                query.skip(skip).limit(pageSize)
+            } ?: query.limit(pageSize)
 
-            val mongoList = (type?.let {
-                collection
-                    .find(Filters.eq("type", it))
-            } ?: collection.find()).toList()
-
-            mongoList
-        } catch (_: Exception) {
+            paginatedQuery.toList()
+        } catch (e: Exception) {
+            e.printStackTrace()
             emptyList()
+        }
+    }
+
+    override suspend fun countPosts(type: String?): Int {
+        return try {
+            type?.let { Filters.eq("type", it) }?.let {
+                collection.countDocuments(it)   .toInt()
+            } ?: 0
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
         }
     }
 
