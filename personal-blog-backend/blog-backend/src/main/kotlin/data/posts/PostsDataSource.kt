@@ -13,4 +13,6 @@ interface PostsDataSource {
     suspend fun countPosts(type: String?): Int
 
     suspend fun getPost(id: Int): DatabasePost?
+
+    suspend fun searchPosts(query: String): List<DatabasePost>
 }
