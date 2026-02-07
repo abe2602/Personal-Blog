@@ -22,7 +22,7 @@ class PostsRepositoryImpl(
             pageSize = pageSize,
             page = page
         ).map { it.toDomain() }
-        val total = countPosts(type = null)
+        val total = countPosts(type = type)
 
         return PostsListing(postsList = posts, total = total)
     }

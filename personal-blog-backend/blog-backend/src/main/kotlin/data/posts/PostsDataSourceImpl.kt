@@ -37,10 +37,8 @@ class PostsDataSourceImpl(
 
     override suspend fun countPosts(type: String?): Int {
         return try {
-            type?.let { Filters.eq("type", it) }?.let {
-                collection.countDocuments(it)   .toInt()
-            } ?: 0
-
+            val filter = type?.let { Filters.eq("type", it) } ?: org.bson.BsonDocument()
+            collection.countDocuments(filter).toInt()
         } catch (e: Exception) {
             e.printStackTrace()
             0

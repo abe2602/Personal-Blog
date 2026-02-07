@@ -41,7 +41,7 @@ fun Route.getPostsRouting() {
         val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
         val page = call.parameters["offset"]?.toIntOrNull()
         val result = getPostsList(
-            type = PostType.THOUGHTS,
+            type = PostType.FAVORITE_CONTENT,
             pageSize = pageSize,
             page = page
         )
