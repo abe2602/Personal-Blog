@@ -10,18 +10,20 @@ const PostContent = (props: PostProps) => {
 
   return (
     <li key={props.index} className="main-content">
-      {post.imageUrl && (
-        <img src={post.imageUrl} alt={post.title} className="post-image" />
-      )}
-
       <div className="main-content-post">
         <div className="main-content-text">
           <h3>{post.title}</h3>
           <small>{post.date.toLocaleDateString()}</small>
-          {post.description.length > 100 ? (
+          {post.imageUrl && (
+            <img src={post.imageUrl} alt={post.title} className={`post-image`} />
+          )}
+
+          {post.description.length > 500 ? (
             <div>
-              <p>{post.description.substring(0, 100)}</p>
-              <a className="read-me" href="/post/1234">Read more</a>
+              <p>{post.description.substring(0, 500)}</p>
+              <a className="read-me" href={`/post/${post.id}`}>
+                Read more
+              </a>
             </div>
           ) : (
             <div>

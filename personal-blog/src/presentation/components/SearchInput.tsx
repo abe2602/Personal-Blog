@@ -1,39 +1,53 @@
-import { useState, useEffect } from 'react';
-import { FaSearch, FaTimes } from 'react-icons/fa';
+import { useState, useEffect } from "react";
+import { FaSearch } from "react-icons/fa";
 
-const SearchInput = ({ onChangeCallback, value = '' }: { onChangeCallback: (value: string) => void; value?: string }) => {
+const SearchInput = ({
+  onChangeCallback,
+  onSearchClick,
+  value = "",
+}: {
+  onChangeCallback: (value: string) => void;
+  onSearchClick?: () => void;
+  value?: string;
+}) => {
   const [searchTerm, setSearchTerm] = useState(value);
 
-  // Update local state when value prop changes
   useEffect(() => {
     setSearchTerm(value);
   }, [value]);
 
-  const handleInputChange = (event: { target: { value: string; }; }) => {
-    const searchText = event.target.value
+  const handleInputChange = (event: { target: { value: string } }) => {
+    const searchText = event.target.value;
     setSearchTerm(searchText);
-    onChangeCallback(searchText.toString())
+    onChangeCallback(searchText.toString());
   };
 
-  const handleClear = () => {
-    setSearchTerm('');
-    onChangeCallback('');
+  const isSearchEnabled = searchTerm.length >= 3;
+
+  const handleIconClick = () => {
+    if (isSearchEnabled && onSearchClick) onSearchClick();
   };
 
   return (
     <div className="search-input-container">
-      <input 
-      type="search" 
-      className="search-input"
-      onChange={handleInputChange}
-      value={searchTerm}
+      <input
+        type="search"
+        className="search-input"
+        onChange={handleInputChange}
+        value={searchTerm}
+        placeholder="Search"
       />
-      <FaSearch className="search-input-icon"/>
-      {searchTerm && (
-        <FaTimes className="search-clear-icon" onClick={handleClear} />
-      )}
+      <button
+        type="button"
+        className={`search-input-icon-btn search-input-icon-btn--right ${!isSearchEnabled ? "search-input-icon-btn--disabled" : ""}`}
+        onClick={handleIconClick}
+        disabled={!isSearchEnabled}
+        aria-label="Search"
+      >
+        <FaSearch className="search-input-icon-btn__icon" aria-hidden />
+      </button>
     </div>
   );
-}
+};
 
 export default SearchInput;
