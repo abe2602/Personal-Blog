@@ -77,20 +77,14 @@ export default function FavoritesController({
   }
 
   function getState() {
-    const filteredPosts = store.posts.filter((post) =>
-      post.title
-        .toLocaleLowerCase()
-        .includes(store.searchTerm.toLocaleLowerCase())
-    );
-
     const totalPages = Math.max(
       1,
       Math.ceil(store.totalPosts / store.postsPerPage)
     );
 
     return {
-      posts: filteredPosts,
-      allPostsSize: filteredPosts.length,
+      posts: store.posts,
+      allPostsSize: store.posts.length,
       isLoading: store.isLoading,
       error: store.error,
       searchTerm: store.searchTerm,
