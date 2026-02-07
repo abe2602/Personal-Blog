@@ -103,6 +103,24 @@ export const getThoughtsPosts = async (
   };
 };
 
+export const searchPosts = async (query: string): Promise<Post[]> => {
+  const response = await apiClient.get<RemotePost[] | { postsList: RemotePost[] }>("posts/search", {
+    params: { q: query },
+  });
+  const list = Array.isArray(response.data)
+    ? response.data
+    : (response.data as { postsList: RemotePost[] })?.postsList ?? [];
+  return list.map((remotePost: RemotePost) => {
+    return new Post(
+      remotePost.title,
+      remotePost.body,
+      new Date(),
+      remotePost.imageUrl,
+      remotePost.id
+    );
+  });
+};
+
 export const getPost = async (id: number): Promise<Post> => {
   const response = await apiClient.get<RemotePost>(`post/${id}`);
   const remotePost = response.data;

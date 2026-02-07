@@ -166,7 +166,11 @@ const HomePage = () => {
       <NavBar />
       <div className="content-layout">
         <div className="posts-section">
-          <SearchInput onChangeCallback={actions.setSearchTerm} value={searchTerm} />
+          <SearchInput
+            onChangeCallback={actions.setSearchTerm}
+            onSearchClick={actions.triggerSearch}
+            value={searchTerm}
+          />
           <ul>
             {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />
