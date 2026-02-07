@@ -15,8 +15,8 @@ fun Route.getPostsRouting() {
     val getPost by injection<GetPost>()
 
     get("/posts") {
-        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
-        val page = call.parameters["offset"]?.toIntOrNull()
+        val pageSize = call.parameters["limit"]?.toIntOrNull() ?: 20
+        val page = call.parameters["page"]?.toIntOrNull()
         val result = getPostsList(pageSize = pageSize, page = page)
 
         call.respond(result)

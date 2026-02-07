@@ -3,6 +3,19 @@ import * as ProfileRemoteRepository from "../../../data/profile/ProfileRepositor
 import { usePostsStore } from "./HomeStore";
 import { useProfileStore } from "../../components/profile_sidemenu/ProfileSideMenuStore";
 
+function getPageFromUrl(): number {
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get("page");
+  const n = page ? parseInt(page, 10) : NaN;
+  return Number.isNaN(n) || n < 1 ? 1 : n;
+}
+
+function setPageInUrl(page: number) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("page", String(page));
+  window.history.pushState({}, "", url.pathname + url.search);
+}
+
 export default function HomeController({
   postsRepository,
   profileRepository,
@@ -13,31 +26,42 @@ export default function HomeController({
   const store = usePostsStore.getState();
   const profileStore = useProfileStore.getState();
 
-  async function getPosts() {
-    if (store.posts.length > 0 && !store.isLoading && profileStore.profile && store.totalPosts > 0) {
-      return;
-    }
-
+  async function fetchPage(page: number) {
     store.setLoading(true);
-
     try {
-      if (store.posts.length == 0 || store.totalPosts === 0) {
-        const postsListing = await postsRepository.getPosts();
-        store.setTotalPosts(postsListing.total);
-        store.setPosts(postsListing.posts);
-      }
-
-      if (!profileStore.profile) {
-        const profile = await profileRepository.getProfile();
-        profileStore.setProfile(profile);
-      }
-
-      profileStore.setError(null);
+      const postsListing = await postsRepository.getPosts(page, store.postsPerPage);
+      store.setTotalPosts(postsListing.total);
+      store.setPosts(postsListing.posts);
+      store.setCurrentPage(page);
       store.setError(null);
     } catch (error) {
       store.setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
       store.setLoading(false);
+    }
+  }
+
+  async function getPosts() {
+    const pageFromUrl = getPageFromUrl();
+    const shouldFetch =
+      store.totalPosts === 0 ||
+      store.currentPage !== pageFromUrl;
+
+    if (shouldFetch) {
+      store.setCurrentPage(pageFromUrl);
+      await fetchPage(pageFromUrl);
+    } else {
+      store.setCurrentPage(pageFromUrl);
+    }
+
+    if (!profileStore.profile) {
+      try {
+        const profile = await profileRepository.getProfile();
+        profileStore.setProfile(profile);
+        profileStore.setError(null);
+      } catch {
+        // keep profile error handling as before if needed
+      }
     }
   }
 
@@ -49,10 +73,12 @@ export default function HomeController({
     store.setSelectedYear(year);
   }
 
-  function setCurrentPage(page: number) {
+  async function setCurrentPage(page: number) {
     store.setCurrentPage(page);
     store.setScrollPosition(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setPageInUrl(page);
+    await fetchPage(page);
   }
 
   function getState() {
@@ -70,14 +96,9 @@ export default function HomeController({
       1,
       Math.ceil(store.totalPosts / store.postsPerPage)
     );
-    const startIndex = (store.currentPage - 1) * store.postsPerPage;
-    const endIndex = startIndex + store.postsPerPage;
-    const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
-
-    console.log(store.currentPage)
 
     return {
-      posts: paginatedPosts,
+      posts: filteredPosts,
       allPostsSize: filteredPosts.length,
       isLoading: store.isLoading,
       error: store.error,

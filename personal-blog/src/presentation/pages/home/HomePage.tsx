@@ -27,6 +27,14 @@ const HomePage = () => {
     actions.getPosts();
   }, []);
 
+  useEffect(() => {
+    const handlePopState = () => {
+      actions.getPosts();
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [currentPage]);

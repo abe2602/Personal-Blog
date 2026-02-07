@@ -2,8 +2,13 @@ import { apiClient } from "../RestApi";
 import { RemotePost, PostsListing } from "./model/RemotePost";
 import { Post } from "../../domain/model/Post";
 
-export const getPosts = async (): Promise<{ posts: Post[]; total: number }> => {
-  const response = await apiClient.get<PostsListing>("posts");
+export const getPosts = async (
+  page: number = 1,
+  limit: number = 10
+): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("posts", {
+    params: { limit: limit, page: (page - 1) },
+  });
   console.log(response);
   const posts = response.data.postsList.map((remotePost: RemotePost) => {
     console.log(remotePost);
