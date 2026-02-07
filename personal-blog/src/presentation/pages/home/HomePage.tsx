@@ -168,7 +168,6 @@ const HomePage = () => {
         <div className="posts-section">
           <SearchInput
             onChangeCallback={actions.setSearchTerm}
-            onSearchClick={actions.triggerSearch}
             value={searchTerm}
           />
           <ul>

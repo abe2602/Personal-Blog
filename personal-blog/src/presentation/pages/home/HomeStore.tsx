@@ -12,10 +12,6 @@ interface PostsState {
   currentPage: number;
   postsPerPage: number;
   totalPosts: number;
-  isSearchResults: boolean;
-  savedListingPosts: Post[];
-  savedListingTotal: number;
-  savedListingPage: number;
   setPosts: (posts: Post[]) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
@@ -24,9 +20,6 @@ interface PostsState {
   setSelectedYear: (year: number | null) => void;
   setCurrentPage: (page: number) => void;
   setTotalPosts: (total: number) => void;
-  setIsSearchResults: (value: boolean) => void;
-  setSavedListing: (posts: Post[], total: number, page: number) => void;
-  restoreSavedListing: () => void;
 }
 
 export const usePostsStore = create<PostsState>()(
@@ -41,10 +34,6 @@ export const usePostsStore = create<PostsState>()(
       currentPage: 1,
       postsPerPage: 10,
       totalPosts: 0,
-      isSearchResults: false,
-      savedListingPosts: [],
-      savedListingTotal: 0,
-      savedListingPage: 1,
       setPosts: (posts) => set({ posts, isLoading: false }),
       setLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),
@@ -53,21 +42,6 @@ export const usePostsStore = create<PostsState>()(
       setSelectedYear: (year) => set({ selectedYear: year, currentPage: 1 }),
       setCurrentPage: (page) => set({ currentPage: page }),
       setTotalPosts: (total) => set({ totalPosts: total }),
-      setIsSearchResults: (value) => set({ isSearchResults: value }),
-      setSavedListing: (posts, total, page) =>
-        set({
-          savedListingPosts: posts,
-          savedListingTotal: total,
-          savedListingPage: page,
-        }),
-      restoreSavedListing: () =>
-        set((state) => ({
-          posts: state.savedListingPosts,
-          totalPosts: state.savedListingTotal,
-          currentPage: state.savedListingPage,
-          searchTerm: "",
-          isSearchResults: false,
-        })),
     }),
     {
       name: "posts-storage",

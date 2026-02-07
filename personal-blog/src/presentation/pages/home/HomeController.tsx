@@ -65,33 +65,8 @@ export default function HomeController({
     }
   }
 
-  function setSearchTerm(term: string) {
-    const wasSearch = store.searchTerm.length >= 3;
-    store.setSearchTerm(term);
-    if (term.length < 3 && wasSearch && store.isSearchResults) {
-      store.restoreSavedListing();
-    }
-  }
-
-  async function triggerSearch() {
-    const term = store.searchTerm;
-    if (term.length < 3) return;
-    if (!store.isSearchResults) {
-      store.setSavedListing(store.posts, store.totalPosts, store.currentPage);
-    }
-    store.setIsSearchResults(true);
-    store.setLoading(true);
-    try {
-      const searchResult = await postsRepository.searchPosts(term);
-      store.setPosts(searchResult);
-      store.setTotalPosts(searchResult.length);
-      store.setCurrentPage(1);
-      store.setError(null);
-    } catch (error) {
-      store.setError(error instanceof Error ? error.message : "Unknown error");
-    } finally {
-      store.setLoading(false);
-    }
+  function setSearchTerm(searchTerm: string) {
+    store.setSearchTerm(searchTerm);
   }
 
   function setSelectedYear(year: number | null) {
@@ -107,27 +82,14 @@ export default function HomeController({
   }
 
   function getState() {
-    const isSearchMode = store.isSearchResults;
-    const filteredPosts = store.posts.filter((post) => {
-      const matchesSearch = isSearchMode
-        ? true
-        : post.title
-            .toLocaleLowerCase()
-            .includes(store.searchTerm.toLocaleLowerCase());
-      const matchesYear =
-        store.selectedYear === null ||
-        post.date.getFullYear() === store.selectedYear;
-      return matchesSearch && matchesYear;
-    });
-
     const totalPages = Math.max(
       1,
       Math.ceil(store.totalPosts / store.postsPerPage)
     );
 
     return {
-      posts: filteredPosts,
-      allPostsSize: filteredPosts.length,
+      posts: store.posts,
+      allPostsSize: store.posts.length,
       isLoading: store.isLoading,
       error: store.error,
       searchTerm: store.searchTerm,
@@ -146,7 +108,6 @@ export default function HomeController({
   const actions = {
     getPosts: getPosts,
     setSearchTerm: setSearchTerm,
-    triggerSearch: triggerSearch,
     setSelectedYear: setSelectedYear,
     setCurrentPage: setCurrentPage,
   };
