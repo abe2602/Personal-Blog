@@ -10,6 +10,7 @@ interface PostsRepository {
         type: PostType?,
         page: Int?,
         pageSize: Int,
+        title: String? = null,
     ): PostsListing
 
     suspend fun getPostById(id: Int): Post?

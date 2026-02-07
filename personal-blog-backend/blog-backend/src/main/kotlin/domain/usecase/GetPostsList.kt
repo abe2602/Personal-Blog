@@ -11,8 +11,9 @@ class GetPostsList(
     operator fun invoke(
         type: PostType? = null,
         page: Int?,
-        pageSize: Int
+        pageSize: Int,
+        title: String? = null
     ): PostsListing = runBlocking {
-        repository.getPostsList(type = type, page = page, pageSize = pageSize)
+        repository.getPostsList(type = type, page = page, pageSize = pageSize, title = title)
     }
 }

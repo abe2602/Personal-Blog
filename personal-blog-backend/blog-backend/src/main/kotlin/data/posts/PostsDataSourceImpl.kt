@@ -19,11 +19,11 @@ class PostsDataSourceImpl(
         type: String?,
         page: Int?,
         pageSize: Int,
+        title: String?,
     ): List<DatabasePost> {
         return try {
-            val query = type?.let {
-                collection.find(Filters.eq("type", it))
-            } ?: collection.find()
+            val filter = buildListFilter(type = type, title = title)
+            val query = collection.find(filter)
 
             val paginatedQuery = page?.let {
                 val skip = (it - 1).coerceAtLeast(0) * pageSize
@@ -37,14 +37,24 @@ class PostsDataSourceImpl(
         }
     }
 
-    override suspend fun countPosts(type: String?): Int {
+    override suspend fun countPosts(type: String?, title: String?): Int {
         return try {
-            val filter = type?.let { Filters.eq("type", it) } ?: org.bson.BsonDocument()
+            val filter = buildListFilter(type = type, title = title)
             collection.countDocuments(filter).toInt()
         } catch (e: Exception) {
             e.printStackTrace()
             0
         }
+    }
+
+    private fun buildListFilter(type: String?, title: String?): Bson {
+        val filters = mutableListOf<Bson>()
+        type?.let { filters.add(Filters.eq("type", it)) }
+        title?.let {
+            val pattern = ".*${Regex.escape(it)}.*"
+            filters.add(Filters.regex("title", pattern, "i"))
+        }
+        return if (filters.isEmpty()) org.bson.BsonDocument() else Filters.and(filters)
     }
 
     override suspend fun getPost(id: Int): DatabasePost? {

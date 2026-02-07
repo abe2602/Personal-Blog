@@ -15,14 +15,16 @@ class PostsRepositoryImpl(
         type: PostType?,
         page: Int?,
         pageSize: Int,
+        title: String?,
     ): PostsListing {
         val databaseType = type?.toDatabaseType()
         val posts = dataSource.getPostsList(
             type = databaseType,
             pageSize = pageSize,
-            page = page
+            page = page,
+            title = title
         ).map { it.toDomain() }
-        val total = countPosts(type = type)
+        val total = countPosts(type = type, title = title)
 
         return PostsListing(postsList = posts, total = total)
     }
@@ -35,7 +37,7 @@ class PostsRepositoryImpl(
         return dataSource.searchPosts(query).map { it.toDomain() }
     }
 
-    private suspend fun countPosts(type: PostType?): Int {
-        return dataSource.countPosts(type?.toDatabaseType())
+    private suspend fun countPosts(type: PostType?, title: String? = null): Int {
+        return dataSource.countPosts(type?.toDatabaseType(), title)
     }
 }
