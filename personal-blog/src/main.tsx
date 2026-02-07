@@ -8,23 +8,8 @@ import ThoughtsPage from "./presentation/pages/thoughts/ThoughtsPage";
 import GalleryPage from "./presentation/pages/gallery/GalleryPage";
 import FavoritesPage from "./presentation/pages/favorites/FavoritesPage";
 import SearchListPage from "./presentation/pages/search_list/SearchListPage";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 window.history.scrollRestoration = 'manual'
-
-// Create a QueryClient instance
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false, 
-      refetchOnMount: false,
-      retry: 1,
-      staleTime: 5 * 60 * 1000, 
-    },
-  },
-});
 
 const router = createBrowserRouter([
   {
@@ -55,9 +40,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
 <StrictMode>
-  <QueryClientProvider client={queryClient}>
-    <RouterProvider router={router}/>
-    <ReactQueryDevtools initialIsOpen={false} />
-  </QueryClientProvider>
+  <RouterProvider router={router}/>
 </StrictMode>
 );
