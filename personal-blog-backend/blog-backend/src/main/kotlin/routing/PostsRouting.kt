@@ -38,8 +38,8 @@ fun Route.getPostsRouting() {
     }
 
     get("/favorites") {
-        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
-        val page = call.parameters["offset"]?.toIntOrNull()
+        val pageSize = call.parameters["limit"]?.toIntOrNull() ?: 20
+        val page = call.parameters["page"]?.toIntOrNull()
         val result = getPostsList(
             type = PostType.FAVORITE_CONTENT,
             pageSize = pageSize,
@@ -50,8 +50,8 @@ fun Route.getPostsRouting() {
     }
 
     get("/gallery") {
-        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
-        val page = call.parameters["offset"]?.toIntOrNull()
+        val pageSize = call.parameters["limit"]?.toIntOrNull() ?: 20
+        val page = call.parameters["page"]?.toIntOrNull()
         val result = getPostsList(
             type = PostType.MEDIA,
             pageSize = pageSize,
@@ -62,8 +62,8 @@ fun Route.getPostsRouting() {
     }
 
     get("/thoughts") {
-        val pageSize = call.parameters["pageSize"]?.toIntOrNull() ?: 20
-        val page = call.parameters["offset"]?.toIntOrNull()
+        val pageSize = call.parameters["limit"]?.toIntOrNull() ?: 20
+        val page = call.parameters["page"]?.toIntOrNull()
         val result = getPostsList(
             type = PostType.THOUGHTS,
             pageSize = pageSize,

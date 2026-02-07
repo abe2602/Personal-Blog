@@ -7,11 +7,9 @@ export const getPosts = async (
   limit: number = 10
 ): Promise<{ posts: Post[]; total: number }> => {
   const response = await apiClient.get<PostsListing>("posts", {
-    params: { limit: limit, page: (page - 1) },
+    params: { limit: limit, page: page },
   });
-  console.log(response);
   const posts = response.data.postsList.map((remotePost: RemotePost) => {
-    console.log(remotePost);
     return new Post(
       remotePost.title,
       remotePost.body,
@@ -26,11 +24,15 @@ export const getPosts = async (
   };
 };
 
-export const getFavoriteMediaPosts = async (): Promise<{ posts: Post[]; total: number }> => {
-  const response = await apiClient.get<PostsListing>("favorites");
-  console.log(response);
+export const getFavoriteMediaPosts = async (
+  page: number = 1,
+  limit: number = 10
+): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("favorites", {
+    params: { limit: limit, page: page },
+  });
   const posts = response.data.postsList.map((remotePost: RemotePost) => {
-    console.log(remotePost);
+ 
     return new Post(
       remotePost.title,
       remotePost.body,
@@ -45,11 +47,15 @@ export const getFavoriteMediaPosts = async (): Promise<{ posts: Post[]; total: n
   };
 };
 
-export const getArtPosts = async (): Promise<{ posts: Post[]; total: number }> => {
-  const response = await apiClient.get<PostsListing>("gallery");
-  console.log(response);
+export const getArtPosts = async (
+  page: number = 1,
+  limit: number = 10
+): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("gallery", {
+    params: { limit: limit, page: page },
+  });
+
   const posts = response.data.postsList.map((remotePost: RemotePost) => {
-    console.log(remotePost);
     return new Post(
       remotePost.title,
       remotePost.body,
@@ -64,11 +70,15 @@ export const getArtPosts = async (): Promise<{ posts: Post[]; total: number }> =
   };
 };
 
-export const getThoughtsPosts = async (): Promise<{ posts: Post[]; total: number }> => {
-  const response = await apiClient.get<PostsListing>("thoughts");
-  console.log(response);
+export const getThoughtsPosts = async (
+  page: number = 1,
+  limit: number = 10
+): Promise<{ posts: Post[]; total: number }> => {
+  const response = await apiClient.get<PostsListing>("thoughts", {
+    params: { limit: limit, page: page },
+  });
+
   const posts = response.data.postsList.map((remotePost: RemotePost) => {
-    console.log(remotePost);
     return new Post(
       remotePost.title,
       remotePost.body,
@@ -86,6 +96,7 @@ export const getThoughtsPosts = async (): Promise<{ posts: Post[]; total: number
       )
     );
   });
+
   return {
     posts,
     total: response.data.total,
