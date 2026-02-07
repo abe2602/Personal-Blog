@@ -10,6 +10,7 @@ data class Post(
     val body: String,
     val imageUrl: String? = null,
     val type: PostType,
+    val creationDate: String = "",
     val recommendedPosts: List<Post> = emptyList()
 )
 

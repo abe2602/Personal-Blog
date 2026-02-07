@@ -12,6 +12,8 @@ data class DatabasePost(
     val body: String,
     val imageUrl: String? = null,
     val type: String,
+    @param:BsonProperty("creationDate")
+    val creationDate: Long? = null,
     @param:BsonProperty("recommendedPostIds")
     val recommendedPostIds: List<Int> = emptyList()
 )
