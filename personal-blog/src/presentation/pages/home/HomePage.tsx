@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 import PostContent from "../../components/PostContent";
@@ -9,6 +10,7 @@ import { usePostsStore } from "./HomeStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const { } = usePostsStore();
   const { actions, state } = DI.resolve("HomeController");
   const { setScrollPosition, scrollPosition } = usePostsStore();
@@ -169,6 +171,7 @@ const HomePage = () => {
           <SearchInput
             onChangeCallback={actions.setSearchTerm}
             value={searchTerm}
+            onSearchClick={() => navigate(`/search?q=${encodeURIComponent(searchTerm)}`)}
           />
           <ul>
             {posts.map((post: Post, index: number) => (

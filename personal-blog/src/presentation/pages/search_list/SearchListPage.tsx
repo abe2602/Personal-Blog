@@ -1,30 +1,29 @@
 import { useLayoutEffect, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 import PostContent from "../../components/PostContent";
-import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
 import DI from "../../../di/DiModule";
-import { useThoughtsStore } from "./ThoughtsStore";
+import { useSearchListStore } from "./SearchListStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
 
-const ThoughtsPage = () => {
-  const navigate = useNavigate();
-  const { actions, state } =
-    DI.resolve("ThoughtsController");
+const SearchListPage = () => {
+  const [searchParams] = useSearchParams();
+  const searchQueryParam = searchParams.get("q") ?? "";
+  const { actions, state } = DI.resolve("SearchListController");
 
-  const { setScrollPosition, scrollPosition } = useThoughtsStore();
+  const { setScrollPosition, scrollPosition } = useSearchListStore();
   const posts = state.posts;
   const isLoading = state.isLoading;
   const searchTerm = state.searchTerm;
   const error = state.error;
   const currentPage = state.currentPage;
   const totalPages = state.totalPages;
-  
+
   useEffect(() => {
     actions.getPosts();
-  }, []);
+  }, [searchQueryParam]);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -160,16 +159,27 @@ const ThoughtsPage = () => {
     );
   };
 
+  const hasQuery = searchTerm.trim().length >= 3;
+  const emptyState = hasQuery && posts.length === 0 && !isLoading;
+
   return (
     <div className="main-container">
       <NavBar />
       <div className="content-layout">
         <div className="posts-section">
-          <SearchInput
-            onChangeCallback={actions.setSearchTerm}
-            value={searchTerm}
-            onSearchClick={() => navigate(`/search?q=${encodeURIComponent(searchTerm)}`)}
-          />
+          {hasQuery && (
+            <p className="search-results-heading">
+              Search results for &quot;{searchTerm}&quot;
+            </p>
+          )}
+          {!hasQuery && (
+            <p className="search-results-heading">
+              Enter at least 3 characters in the search box and click the search button.
+            </p>
+          )}
+          {emptyState && (
+            <p>No posts found for &quot;{searchTerm}&quot;</p>
+          )}
           <ul>
             {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />
@@ -178,11 +188,11 @@ const ThoughtsPage = () => {
           {renderPagination()}
         </div>
         <div className="sidebar-section">
-          <SideMenu/>
+          <SideMenu />
         </div>
       </div>
     </div>
   );
 };
 
-export default ThoughtsPage;
+export default SearchListPage;

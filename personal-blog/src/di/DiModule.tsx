@@ -5,6 +5,7 @@ import HomeController from '../presentation/pages/home/HomeController';
 import FavoritesController from '../presentation/pages/favorites/FavoritesController';
 import GalleryController from '../presentation/pages/gallery/GalleryController';
 import ThoughtsController from '../presentation/pages/thoughts/ThoughtsController';
+import SearchListController from '../presentation/pages/search_list/SearchListController';
 import PostController from '../presentation/pages/post/PostController';
 import ProfileSideMenuController from '../presentation/components/profile_sidemenu/ProfileSideMenuController';
 
@@ -19,6 +20,7 @@ container.register({
     FavoritesController: asFunction(FavoritesController),
     GalleryController: asFunction(GalleryController),
     ThoughtsController: asFunction(ThoughtsController),
+    SearchListController: asFunction(SearchListController),
     PostController: asFunction(PostController),
     ProfileSideMenuController: asFunction(ProfileSideMenuController)
 })

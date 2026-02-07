@@ -7,6 +7,7 @@ import PostPage from "./presentation/pages/post/PostPage";
 import ThoughtsPage from "./presentation/pages/thoughts/ThoughtsPage";
 import GalleryPage from "./presentation/pages/gallery/GalleryPage";
 import FavoritesPage from "./presentation/pages/favorites/FavoritesPage";
+import SearchListPage from "./presentation/pages/search_list/SearchListPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
     {
     path: "/thoughts",
     element: <ThoughtsPage />,
+  },
+  {
+    path: "/search",
+    element: <SearchListPage />,
   },
 ]);
 

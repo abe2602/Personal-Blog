@@ -1,4 +1,5 @@
 import { useLayoutEffect, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 import PostContent from "../../components/PostContent";
@@ -9,6 +10,7 @@ import { useFavoritesStore } from "./FavoritesStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
 
 const FavoritesPage = () => {
+  const navigate = useNavigate();
   const { actions, state } =
     DI.resolve("FavoritesController");
 
@@ -163,7 +165,11 @@ const FavoritesPage = () => {
       <NavBar />
       <div className="content-layout">
         <div className="posts-section">
-          <SearchInput onChangeCallback={actions.setSearchTerm} value={searchTerm} />
+          <SearchInput
+            onChangeCallback={actions.setSearchTerm}
+            value={searchTerm}
+            onSearchClick={() => navigate(`/search?q=${encodeURIComponent(searchTerm)}`)}
+          />
           <ul>
             {posts.map((post: Post, index: number) => (
               <PostContent key={post.title + index} index={index} post={post} />

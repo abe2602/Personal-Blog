@@ -1,4 +1,5 @@
 import { useLayoutEffect, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 import PostContent from "../../components/PostContent";
@@ -9,6 +10,7 @@ import { useGalleryStore } from "./GalleryStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
 
 const GalleryPage = () => {
+  const navigate = useNavigate();
   const { actions, state } = DI.resolve("GalleryController");
 
   const { setScrollPosition, scrollPosition } = useGalleryStore();
@@ -165,6 +167,7 @@ const GalleryPage = () => {
           <SearchInput
             onChangeCallback={actions.setSearchTerm}
             value={searchTerm}
+            onSearchClick={() => navigate(`/search?q=${encodeURIComponent(searchTerm)}`)}
           />
           <ul>
             {posts.map((post: Post, index: number) => (

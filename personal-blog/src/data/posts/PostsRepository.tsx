@@ -4,10 +4,12 @@ import { Post } from "../../domain/model/Post";
 
 export const getPosts = async (
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
+  search: string = ""
 ): Promise<{ posts: Post[]; total: number }> => {
+  console.log(search)
   const response = await apiClient.get<PostsListing>("posts", {
-    params: { limit: limit, page: page },
+    params: { limit: limit, page: page, searchQuery: search },
   });
   const posts = response.data.postsList.map((remotePost: RemotePost) => {
     return new Post(
