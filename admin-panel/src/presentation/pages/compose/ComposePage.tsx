@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import DI from "../../../di/DiModule";
 import { useComposeStore } from "./ComposeStore";
 import type { ContentBlock } from "../../../domain/model/ContentBlock";
@@ -28,6 +28,22 @@ const ComposePage = () => {
 
   const [saveLoading, setSaveLoading] = useState(false);
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+  const undoHistoryRef = useRef<Record<string, string[]>>({});
+  const MAX_UNDO = 50;
+
+  const pushUndo = useCallback((blockId: string, value: string) => {
+    if (!undoHistoryRef.current[blockId]) undoHistoryRef.current[blockId] = [];
+    const arr = undoHistoryRef.current[blockId];
+    arr.push(value);
+    if (arr.length > MAX_UNDO) arr.shift();
+  }, []);
+
+  const getUndoAndPop = useCallback((blockId: string): string | null => {
+    const arr = undoHistoryRef.current[blockId];
+    if (!arr || arr.length === 0) return null;
+    return arr.pop() ?? null;
+  }, []);
 
   const canSave = canSavePost(title, featuredImageUrl, blocks);
 
@@ -160,6 +176,8 @@ const ComposePage = () => {
                   onRemove={() => removeBlock(block.id)}
                   onMoveUp={() => moveBlock(block.id, "up")}
                   onMoveDown={() => moveBlock(block.id, "down")}
+                  pushUndo={pushUndo}
+                  getUndoAndPop={getUndoAndPop}
                 />
               ))}
             </div>
@@ -212,6 +230,8 @@ function BlockEditor({
   onRemove,
   onMoveUp,
   onMoveDown,
+  pushUndo,
+  getUndoAndPop,
 }: {
   block: ContentBlock;
   index: number;
@@ -220,6 +240,8 @@ function BlockEditor({
   onRemove: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
+  pushUndo: (blockId: string, value: string) => void;
+  getUndoAndPop: (blockId: string) => string | null;
 }) {
   return (
     <div className="compose-block">
@@ -239,13 +261,50 @@ function BlockEditor({
       </div>
       <div className="compose-block-body">
         {block.type === "paragraph" && (
-          <textarea
-            className="compose-block-input"
-            value={block.text}
-            onChange={(e) => onUpdate({ text: e.target.value })}
-            placeholder="Paragraph text..."
-            rows={3}
-          />
+          <>
+            <textarea
+              className="compose-block-input compose-block-input--paragraph"
+              value={block.text}
+              onChange={(e) => {
+                if (e.target.value !== block.text) {
+                  pushUndo(block.id, block.text);
+                  onUpdate({ text: e.target.value });
+                }
+              }}
+              onKeyDown={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                const mod = e.ctrlKey || e.metaKey;
+                if (mod && e.key === "z" && !e.shiftKey) {
+                  e.preventDefault();
+                  const value = getUndoAndPop(block.id);
+                  if (value !== null) onUpdate({ text: value });
+                  return;
+                }
+                const isB = mod && e.key === "b";
+                const isI = mod && e.key === "i";
+                const isS = mod && e.shiftKey && e.key === "X";
+                if (isB || isI || isS) {
+                  e.preventDefault();
+                  const start = target.selectionStart;
+                  const end = target.selectionEnd;
+                  const before = block.text.slice(0, start);
+                  const selected = block.text.slice(start, end);
+                  const after = block.text.slice(end);
+                  const wrap = isB ? "**" : isI ? "*" : "~~";
+                  const newText = `${before}${wrap}${selected}${wrap}${after}`;
+                  pushUndo(block.id, block.text);
+                  onUpdate({ text: newText });
+                  setTimeout(() => {
+                    target.setSelectionRange(start + wrap.length, end + wrap.length);
+                    target.focus();
+                  }, 0);
+                }
+              }}
+              placeholder="Paragraph text..."
+              rows={8}
+            />
+            <span className="compose-block-hint">Use **bold**, *italic*, ~~strikethrough~~. Or select text and press Ctrl+B / Ctrl+I / Ctrl+Shift+X.</span>
+          </>
         )}
         {block.type === "image" && (
           <>
@@ -281,7 +340,41 @@ function BlockEditor({
               type="text"
               className="compose-block-input"
               value={block.text}
-              onChange={(e) => onUpdate({ text: e.target.value })}
+              onChange={(e) => {
+                if (e.target.value !== block.text) {
+                  pushUndo(block.id, block.text);
+                  onUpdate({ text: e.target.value });
+                }
+              }}
+              onKeyDown={(e) => {
+                const target = e.target as HTMLInputElement;
+                const mod = e.ctrlKey || e.metaKey;
+                if (mod && e.key === "z" && !e.shiftKey) {
+                  e.preventDefault();
+                  const value = getUndoAndPop(block.id);
+                  if (value !== null) onUpdate({ text: value });
+                  return;
+                }
+                const isB = mod && e.key === "b";
+                const isI = mod && e.key === "i";
+                const isS = mod && e.shiftKey && e.key === "X";
+                if (isB || isI || isS) {
+                  e.preventDefault();
+                  const start = target.selectionStart ?? 0;
+                  const end = target.selectionEnd ?? 0;
+                  const before = block.text.slice(0, start);
+                  const selected = block.text.slice(start, end);
+                  const after = block.text.slice(end);
+                  const wrap = isB ? "**" : isI ? "*" : "~~";
+                  const newText = `${before}${wrap}${selected}${wrap}${after}`;
+                  pushUndo(block.id, block.text);
+                  onUpdate({ text: newText });
+                  setTimeout(() => {
+                    target.setSelectionRange(start + wrap.length, end + wrap.length);
+                    target.focus();
+                  }, 0);
+                }
+              }}
               placeholder="Heading text..."
             />
           </>
