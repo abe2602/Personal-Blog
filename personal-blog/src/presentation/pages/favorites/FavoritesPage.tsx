@@ -6,6 +6,7 @@ import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
 import EmptyState from "../../components/EmptyState";
+import LogoWhenSidebarHidden from "../../components/LogoWhenSidebarHidden";
 import DI from "../../../di/DiModule";
 import { useFavoritesStore } from "./FavoritesStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
@@ -166,6 +167,7 @@ const FavoritesPage = () => {
       <NavBar />
       <div className="content-layout">
         <div className="posts-section">
+          <LogoWhenSidebarHidden />
           <SearchInput
             onChangeCallback={actions.setSearchTerm}
             value={searchTerm}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import DI from "../../../di/DiModule";
 import { useProfileStore } from "./ProfileSideMenuStore";
 
@@ -18,6 +19,9 @@ const SideMenu = (props: SideMenuProps) => {
   
   return (
     <div className="side-menu">
+      <Link to="/" className="side-menu-logo" aria-label="Home">
+        <img src="/logo.png" alt="" className="side-menu-logo-img" />
+      </Link>
       {profile.imageUrl && (
         <img
           src={profile.imageUrl}
@@ -27,6 +31,7 @@ const SideMenu = (props: SideMenuProps) => {
       )}
       <h2 className="side-menu-message">{profile.title}</h2>
       <p className="side-menu-description">{profile.description}</p>
+      {/* Blog Archive
       {props.availableYears && props.availableYears.length > 0 && (
         <div className="side-menu-years">
           <h3 className="side-menu-years-title">Blog Archieve</h3>
@@ -53,6 +58,7 @@ const SideMenu = (props: SideMenuProps) => {
           </div>
         </div>
       )}
+      */}
     </div>
   );
 };

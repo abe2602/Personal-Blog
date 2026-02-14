@@ -123,6 +123,7 @@ body {
   flex-shrink: 0;
   align-self: flex-start;
   padding: 0;
+  margin: 0;
 }
 
 .main-content {
@@ -308,11 +309,25 @@ body {
   box-shadow: none;
   border-radius: 0;
   padding: 0;
+  margin: 0;
+}
+
+.side-menu-logo {
+  display: block;
+  margin: 0;
+  padding-bottom: 12px;
+}
+
+.side-menu-logo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .side-menu-message {
   color: #1A1A1A;
-  margin-bottom: 15px;
+  margin: 0;
   font-size: 18px;
   font-weight: 500;
   padding-bottom: 10px;
@@ -323,17 +338,17 @@ body {
   color: #4A4A4A;
   line-height: 1.6;
   font-size: 14px;
-  margin-top: 10px;
+  margin: 0;
 }
 
 .side-menu-image {
   width: 100%;
-  border-radius: 0;
-  margin-bottom: 15px;
+  border-radius: 8px;
+  margin: 0;
 }
 
 .side-menu-years {
-  margin-top: 2rem;
+  margin: 0;
   padding-top: 1.5rem;
   border-top: 1px solid #e0e0e0;
 }
@@ -641,17 +656,35 @@ body {
   text-overflow: ellipsis;
 }
 
+/* Logo above search when sidebar is hidden */
+.logo-when-sidebar-hidden {
+  display: none;
+}
+
+.logo-when-sidebar-hidden-img {
+  display: block;
+  width: 280px;
+  height: auto;
+  object-fit: contain;
+}
+
 /* Hide sidebar on small screens */
 @media (max-width: 1024px) {
   .sidebar-section {
     display: none;
   }
-  
+
+  .logo-when-sidebar-hidden {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
   .content-layout {
     gap: 0;
     padding: 20px;
   }
-  
+
   .posts-section {
     border-right: none;
     padding-right: 0;
