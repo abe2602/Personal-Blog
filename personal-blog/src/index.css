@@ -147,6 +147,44 @@ body {
   border-bottom: none;
 }
 
+/* Compact list item (home, favorites, gallery, thoughts) */
+.post-list-item {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+}
+
+.post-list-item .main-content-text h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+
+.post-list-item .main-content-text small {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.post-list-item .post-image {
+  width: 50%;
+  height: auto;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+}
+
+.post-list-item .main-content-text p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-list-item .read-me {
+  font-size: 13px;
+}
+
 .main-content-post {
   padding: 0;
 }
@@ -227,6 +265,36 @@ body {
 .read-me:hover {
   color: #1D4ED8;
   text-decoration: underline;
+}
+
+/* Empty state (no posts on tab) */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px 56px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.empty-state-emoji {
+  display: block;
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 16px;
+  filter: grayscale(0.1);
+}
+
+.empty-state-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0 0 10px;
+}
+
+.empty-state-message {
+  font-size: 15px;
+  color: #6B6B6B;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .side-menu {

@@ -6,6 +6,7 @@ import CircularProgress from "../../components/circular_progress/CircularProgres
 import { usePostStore } from "./PostStore";
 import { Post } from "../../../domain/model/Post";
 import { Link } from "react-router-dom";
+import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 
 const PostPage = () => {
     const { actions } = DI.resolve("PostController");
@@ -30,6 +31,9 @@ const PostPage = () => {
                     <div className="posts-section">
                         <CircularProgress />
                     </div>
+                    <div className="sidebar-section">
+                        <SideMenu />
+                    </div>
                 </div>
             </div>
         );
@@ -38,12 +42,15 @@ const PostPage = () => {
     if (error) {
         return (
             <div className="main-container">
-            <NavBar />
-            <div className="content-layout">
-                <div className="posts-section">
-                <p>Error loading posts: {error}</p>
+                <NavBar />
+                <div className="content-layout">
+                    <div className="posts-section">
+                        <p>Error loading posts: {error}</p>
+                    </div>
+                    <div className="sidebar-section">
+                        <SideMenu />
+                    </div>
                 </div>
-            </div>
             </div>
         );
     }
@@ -100,6 +107,9 @@ const PostPage = () => {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="sidebar-section">
+                        <SideMenu />
                     </div>
                 </div>
             </div>

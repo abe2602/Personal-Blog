@@ -5,6 +5,7 @@ import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 import PostContent from "../../components/PostContent";
 import SearchInput from "../../components/SearchInput";
 import NavBar from "../../components/navbar/NavBar";
+import EmptyState from "../../components/EmptyState";
 import DI from "../../../di/DiModule";
 import { useGalleryStore } from "./GalleryStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
@@ -172,12 +173,22 @@ const GalleryPage = () => {
             actions.setSearchTerm("");
           }}
           />
-          <ul>
-            {posts.map((post: Post, index: number) => (
-              <PostContent key={post.title + index} index={index} post={post} />
-            ))}
-          </ul>
-          {renderPagination()}
+          {posts.length === 0 ? (
+            <EmptyState
+              emoji="🖼️"
+              title="No gallery posts yet"
+              message="Art and media will appear here when you add them."
+            />
+          ) : (
+            <>
+              <ul>
+                {posts.map((post: Post, index: number) => (
+                  <PostContent key={post.title + index} index={index} post={post} />
+                ))}
+              </ul>
+              {renderPagination()}
+            </>
+          )}
         </div>
         <div className="sidebar-section">
           <SideMenu/>

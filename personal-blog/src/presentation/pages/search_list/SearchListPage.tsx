@@ -4,6 +4,7 @@ import { Post } from "../../../domain/model/Post";
 import SideMenu from "../../components/profile_sidemenu/ProfileSideMenu";
 import PostContent from "../../components/PostContent";
 import NavBar from "../../components/navbar/NavBar";
+import EmptyState from "../../components/EmptyState";
 import DI from "../../../di/DiModule";
 import { useSearchListStore } from "./SearchListStore";
 import CircularProgress from "../../components/circular_progress/CircularProgress";
@@ -177,15 +178,22 @@ const SearchListPage = () => {
               Enter at least 3 characters in the search box and click the search button.
             </p>
           )}
-          {emptyState && (
-            <p>No posts found for &quot;{searchTerm}&quot;</p>
+          {emptyState ? (
+            <EmptyState
+              emoji="🔍"
+              title="No results found"
+              message={`No posts match "${searchTerm}". Try different keywords?`}
+            />
+          ) : (
+            <>
+              <ul>
+                {posts.map((post: Post, index: number) => (
+                  <PostContent key={post.title + index} index={index} post={post} />
+                ))}
+              </ul>
+              {renderPagination()}
+            </>
           )}
-          <ul>
-            {posts.map((post: Post, index: number) => (
-              <PostContent key={post.title + index} index={index} post={post} />
-            ))}
-          </ul>
-          {renderPagination()}
         </div>
         <div className="sidebar-section">
           <SideMenu />

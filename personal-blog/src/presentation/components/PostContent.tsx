@@ -6,7 +6,7 @@ interface PostProps {
   index: number;
 }
 
-const PREVIEW_LENGTH = 500;
+const PREVIEW_LENGTH = 220;
 
 const PostContent = (props: PostProps) => {
   const post = props.post;
@@ -15,7 +15,7 @@ const PostContent = (props: PostProps) => {
   const preview = isLong ? plainText.substring(0, PREVIEW_LENGTH) : plainText;
 
   return (
-    <li key={props.index} className="main-content">
+    <li key={props.index} className="main-content post-list-item">
       <div className="main-content-post">
         <div className="main-content-text">
           <h3>{post.title}</h3>
