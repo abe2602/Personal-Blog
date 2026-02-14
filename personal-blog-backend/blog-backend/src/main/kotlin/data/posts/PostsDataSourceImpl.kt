@@ -1,5 +1,6 @@
 package org.example.data.posts
 
+import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Sorts
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
@@ -24,7 +25,9 @@ class PostsDataSourceImpl(
     ): List<DatabasePost> {
         return try {
             val filter = buildListFilter(type = type, title = title)
-            val query = collection.find(filter)
+            val query = collection
+                .find(filter)
+                .sort(Sorts.descending("creationDate"))
 
             val paginatedQuery = page?.let {
                 val skip = (it - 1).coerceAtLeast(0) * pageSize
@@ -62,7 +65,9 @@ class PostsDataSourceImpl(
         return try {
             collection
                 .find(Filters.eq("_id", id))
-                .firstOrNull()
+                .firstOrNull()?.let {
+                    it
+                }
         } catch (e: Exception) {
             throw e
         }
@@ -83,5 +88,20 @@ class PostsDataSourceImpl(
 
     override suspend fun savePost(post: DatabasePost) {
         collection.insertOne(post)
+    }
+
+    override suspend fun getRandomPosts(limit: Int): List<DatabasePost> {
+        if (limit <= 0) return emptyList()
+        return try {
+            collection.aggregate<DatabasePost>(
+                listOf(
+                    Aggregates.sample(limit),
+                    Aggregates.sort(Sorts.descending("creationDate"))
+                )
+            ).toList()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
     }
 }

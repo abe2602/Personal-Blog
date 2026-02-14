@@ -18,4 +18,6 @@ interface PostsDataSource {
     suspend fun getNextId(): Int
 
     suspend fun savePost(post: DatabasePost)
+
+    suspend fun getRandomPosts(limit: Int): List<DatabasePost>
 }

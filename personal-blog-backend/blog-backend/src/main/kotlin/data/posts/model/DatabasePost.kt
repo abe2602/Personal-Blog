@@ -15,5 +15,5 @@ data class DatabasePost(
     @param:BsonProperty("creationDate")
     val creationDate: Long? = null,
     @param:BsonProperty("recommendedPostIds")
-    val recommendedPostIds: List<Int> = emptyList()
+    val recommendedPosts: List<DatabasePost> = emptyList()
 )

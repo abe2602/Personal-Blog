@@ -53,7 +53,11 @@ class PostsRepositoryImpl(
 
     override suspend fun savePost(post: Post): Post {
         val nextId = dataSource.getNextId()
-        val databasePost = post.toDatabase(id = nextId)
+        val recommendedPosts = dataSource.getRandomPosts(limit = 10)
+        val databasePost = post.toDatabase(
+            id = nextId,
+            recommendedPosts = recommendedPosts
+        )
         dataSource.savePost(databasePost)
         invalidateCache()
         return databasePost.toDomain()

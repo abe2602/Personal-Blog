@@ -23,7 +23,7 @@ fun DatabasePost.toDomain(): Post {
         imageUrl = imageUrl,
         type = type.toDomain(),
         creationDate = creationDate.toCreationDateString(),
-        recommendedPosts = emptyList() // come back here later
+        recommendedPosts = recommendedPosts.map { it.toDomain() }
     )
 }
 
@@ -52,7 +52,7 @@ fun String?.toCreationDateMillis(): Long {
     }
 }
 
-fun Post.toDatabase(id: Int): DatabasePost {
+fun Post.toDatabase(id: Int, recommendedPosts: List<DatabasePost>): DatabasePost {
     return DatabasePost(
         id = id,
         userId = userId,
@@ -61,6 +61,6 @@ fun Post.toDatabase(id: Int): DatabasePost {
         imageUrl = imageUrl,
         type = type.toDatabaseType(),
         creationDate = creationDate.toCreationDateMillis(),
-        recommendedPostIds = recommendedPosts.map { it.id }
+        recommendedPosts = recommendedPosts
     )
 }
