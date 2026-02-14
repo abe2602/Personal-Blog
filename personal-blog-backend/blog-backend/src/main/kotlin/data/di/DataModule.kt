@@ -23,7 +23,7 @@ val dataModule = module {
         PostsDataSourceImpl(database = get<MongoDatabase>())
     }
 
-    single<PostsRepository> { 
+    single<PostsRepository> {
         PostsRepositoryImpl(dataSource = get<PostsDataSource>())
     }
 }
