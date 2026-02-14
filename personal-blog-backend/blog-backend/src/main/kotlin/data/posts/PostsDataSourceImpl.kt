@@ -1,6 +1,7 @@
 package org.example.data.posts
 
 import com.mongodb.client.model.Filters
+import com.mongodb.client.model.Sorts
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
@@ -65,5 +66,22 @@ class PostsDataSourceImpl(
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    override suspend fun getNextId(): Int {
+        return try {
+            collection
+                .find()
+                .sort(Sorts.descending("_id"))
+                .firstOrNull()
+                ?.id?.plus(1) ?: 1
+        } catch (e: Exception) {
+            e.printStackTrace()
+            1
+        }
+    }
+
+    override suspend fun savePost(post: DatabasePost) {
+        collection.insertOne(post)
     }
 }

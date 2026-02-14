@@ -42,3 +42,25 @@ fun String.toDomain(): PostType {
         else -> PostType.MEDIA
     }
 }
+
+fun String?.toCreationDateMillis(): Long {
+    if (this.isNullOrBlank()) return System.currentTimeMillis()
+    return try {
+        Instant.parse(this).toEpochMilli()
+    } catch (_: Exception) {
+        System.currentTimeMillis()
+    }
+}
+
+fun Post.toDatabase(id: Int): DatabasePost {
+    return DatabasePost(
+        id = id,
+        userId = userId,
+        title = title,
+        body = body,
+        imageUrl = imageUrl,
+        type = type.toDatabaseType(),
+        creationDate = creationDate.toCreationDateMillis(),
+        recommendedPostIds = recommendedPosts.map { it.id }
+    )
+}

@@ -14,4 +14,6 @@ interface PostsRepository {
     ): PostsListing
 
     suspend fun getPostById(id: Int): Post?
+
+    suspend fun savePost(post: Post): Post
 }
