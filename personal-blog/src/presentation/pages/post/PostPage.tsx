@@ -62,9 +62,10 @@ const PostPage = () => {
                                     {post.imageUrl && (
                                         <img src={post.imageUrl} alt={post.title} className={`post-image`} />
                                     )}
-                                    <div>
-                                        <p>{post.description}</p>
-                                    </div>
+                                    <div
+                                        className="post-body"
+                                        dangerouslySetInnerHTML={{ __html: post.description }}
+                                    />
                                     {post.recommendedPosts && post.recommendedPosts.length > 0 && (
                                         <div className="recommended-posts-container">
                                             <h4 className="recommended-posts-heading">

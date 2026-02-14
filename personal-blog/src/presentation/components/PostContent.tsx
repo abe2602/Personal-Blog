@@ -1,12 +1,18 @@
 import { Post } from "../../domain/model/Post";
+import { stripHtml } from "../../utils/stripHtml";
 
 interface PostProps {
   post: Post;
   index: number;
 }
 
+const PREVIEW_LENGTH = 500;
+
 const PostContent = (props: PostProps) => {
   const post = props.post;
+  const plainText = stripHtml(post.description);
+  const isLong = plainText.length > PREVIEW_LENGTH;
+  const preview = isLong ? plainText.substring(0, PREVIEW_LENGTH) : plainText;
 
   return (
     <li key={props.index} className="main-content">
@@ -18,18 +24,14 @@ const PostContent = (props: PostProps) => {
             <img src={post.imageUrl} alt={post.title} className={`post-image`} />
           )}
 
-          {post.description.length > 500 ? (
-            <div>
-              <p>{post.description.substring(0, 500)}</p>
+          <div>
+            <p>{preview}{isLong ? "…" : ""}</p>
+            {isLong && (
               <a className="read-me" href={`/post/${post.id}`}>
                 Read more
               </a>
-            </div>
-          ) : (
-            <div>
-              <p>{post.description}</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </li>
