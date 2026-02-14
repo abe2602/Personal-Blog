@@ -6,12 +6,13 @@ interface PostProps {
   index: number;
 }
 
-const PREVIEW_LENGTH = 220;
+const PREVIEW_LENGTH = 400;
 
 const PostContent = (props: PostProps) => {
   const post = props.post;
   const plainText = stripHtml(post.description);
-  const isLong = plainText.length > PREVIEW_LENGTH;
+  const isLong =
+    post.description.length > PREVIEW_LENGTH || plainText.length > PREVIEW_LENGTH;
   const preview = isLong ? plainText.substring(0, PREVIEW_LENGTH) : plainText;
 
   return (
