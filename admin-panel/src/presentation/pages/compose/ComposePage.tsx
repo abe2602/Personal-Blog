@@ -280,6 +280,23 @@ function BlockEditor({
                   if (value !== null) onUpdate({ text: value });
                   return;
                 }
+                if (mod && e.key === "k") {
+                  e.preventDefault();
+                  const start = target.selectionStart;
+                  const end = target.selectionEnd;
+                  const selected = block.text.slice(start, end);
+                  const url = window.prompt("Enter URL:", selected ? "" : "https://");
+                  if (url != null && url.trim() !== "") {
+                    const before = block.text.slice(0, start);
+                    const after = block.text.slice(end);
+                    const linkText = selected.trim() || url;
+                    const newText = `${before}[${linkText}](${url.trim()})${after}`;
+                    pushUndo(block.id, block.text);
+                    onUpdate({ text: newText });
+                    setTimeout(() => target.focus(), 0);
+                  }
+                  return;
+                }
                 const isB = mod && e.key === "b";
                 const isI = mod && e.key === "i";
                 const isS = mod && e.shiftKey && e.key === "X";
@@ -303,7 +320,7 @@ function BlockEditor({
               placeholder="Paragraph text..."
               rows={8}
             />
-            <span className="compose-block-hint">Use **bold**, *italic*, ~~strikethrough~~. Or select text and press Ctrl+B / Ctrl+I / Ctrl+Shift+X.</span>
+            <span className="compose-block-hint">Use **bold**, *italic*, ~~strikethrough~~, [text](url) links. Shortcuts: Ctrl+B / Ctrl+I / Ctrl+Shift+X / Ctrl+K (link).</span>
           </>
         )}
         {block.type === "image" && (
@@ -353,6 +370,23 @@ function BlockEditor({
                   e.preventDefault();
                   const value = getUndoAndPop(block.id);
                   if (value !== null) onUpdate({ text: value });
+                  return;
+                }
+                if (mod && e.key === "k") {
+                  e.preventDefault();
+                  const start = target.selectionStart ?? 0;
+                  const end = target.selectionEnd ?? 0;
+                  const selected = block.text.slice(start, end);
+                  const url = window.prompt("Enter URL:", selected ? "" : "https://");
+                  if (url != null && url.trim() !== "") {
+                    const before = block.text.slice(0, start);
+                    const after = block.text.slice(end);
+                    const linkText = selected.trim() || url;
+                    const newText = `${before}[${linkText}](${url.trim()})${after}`;
+                    pushUndo(block.id, block.text);
+                    onUpdate({ text: newText });
+                    setTimeout(() => target.focus(), 0);
+                  }
                   return;
                 }
                 const isB = mod && e.key === "b";

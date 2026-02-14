@@ -7,22 +7,25 @@ function escapeHtml(text: string): string {
 }
 
 /**
- * Applies inline formatting: **bold** -> <strong>, *italic* -> <em>, ~~strikethrough~~ -> <s>.
+ * Applies inline formatting: **bold** -> <strong>, *italic* -> <em>, ~~strikethrough~~ -> <s>, [text](url) -> <a>.
  * Run after escapeHtml so output is safe.
  */
 function applyInlineFormatting(escaped: string): string {
-  return escaped
+  let s = escaped
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
     .replace(/~~([^~]+)~~/g, "<s>$1</s>")
     .replace(/__([^_]+)__/g, "<strong>$1</strong>")
     .replace(/_([^_]+)_/g, "<em>$1</em>");
+  // Links: [link text](url) -> <a href="url">link text</a>
+  s = s.replace(/\[([^\]]*)\]\(([^)]*)\)/g, (_, text, url) => `<a href="${escapeHtml(url)}">${text}</a>`);
+  return s;
 }
 
 /**
  * Builds the post body HTML fragment to be used in personal-blog PostScreen.
  * Uses classes compatible with personal-blog .main-content-text styles.
- * Paragraphs and headings support **bold** and *italic* (or __bold__ and _italic_).
+ * Paragraphs and headings support **bold**, *italic*, ~~strikethrough~~, and [text](url) links.
  */
 export function buildPostBodyHtml(blocks: ContentBlock[]): string {
   return blocks
