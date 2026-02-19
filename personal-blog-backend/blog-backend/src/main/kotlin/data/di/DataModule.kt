@@ -10,12 +10,18 @@ import org.koin.dsl.module
 
 val dataModule = module {
     single<MongoClient> {
-        val connectionString = System.getenv("MONGODB_URI").orEmpty()
+        val connectionString = System.getenv("MONGODB_URI")?.takeIf { it.isNotBlank() }
+            ?: throw IllegalStateException(
+                "MONGODB_URI environment variable is not set. Set it in Railway (or your env) to your MongoDB connection string."
+            )
         MongoClient.create(connectionString)
     }
 
     single<MongoDatabase> {
-        val databaseName = System.getenv("MONGODB_DATABASE").orEmpty()
+        val databaseName = System.getenv("MONGODB_DATABASE")?.takeIf { it.isNotBlank() }
+            ?: throw IllegalStateException(
+                "MONGODB_DATABASE environment variable is not set. Set it in Railway (or your env) to your database name."
+            )
         get<MongoClient>().getDatabase(databaseName)
     }
 

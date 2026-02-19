@@ -16,6 +16,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:2.3.0")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.0")
+    implementation("io.ktor:ktor-server-status-pages:2.3.0")
     implementation("io.ktor:ktor-server-auth:2.3.0") // For authentication
     implementation("ch.qos.logback:logback-classic:1.2.10") // Logging
     
