@@ -44,3 +44,8 @@ configurations.all {
 tasks.test {
     useJUnitPlatform()
 }
+
+// Main class for fat JAR / ShadowJar (required for Railway and runFatJar)
+application {
+    mainClass.set("org.example.MainKt")
+}
