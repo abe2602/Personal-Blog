@@ -14,6 +14,7 @@ dist-ssr
 
 # Environment variables (do not commit - contains backend URL etc.)
 .env
+.env.example
 .env.*
 .env.local
 .env.*.local
