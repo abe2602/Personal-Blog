@@ -45,7 +45,10 @@ private fun Application.configureCors() {
         // Local dev
         allowHost("localhost:5173", schemes = listOf("http"))
         allowHost("127.0.0.1:5173", schemes = listOf("http"))
-        // Production: set CORS_ORIGINS env on Railway (e.g. "https://myblog.com" or "https://myblog.com,https://www.myblog.com")
+        // Production
+        allowHost("www.abecaxis.com", schemes = listOf("https"))
+        allowHost("abecaxis.com", schemes = listOf("https"))
+        // Extra origins from env: set CORS_ORIGINS on Railway (e.g. "https://myblog.com,https://www.myblog.com")
         System.getenv("CORS_ORIGINS")?.split(",")?.forEach { origin ->
             val trimmed = origin.trim().takeIf { it.isNotBlank() } ?: return@forEach
             val host = trimmed.removePrefix("http://").removePrefix("https://")
