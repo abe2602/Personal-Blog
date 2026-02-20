@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import DI from "../../../di/DiModule";
 import { useProfileStore } from "./ProfileSideMenuStore";
 
-interface SideMenuProps {
-  availableYears?: number[];
-  selectedYear?: number | null;
-  onYearSelect?: (year: number | null) => void;
-}
+// interface SideMenuProps {
+//   availableYears?: number[];
+//   selectedYear?: number | null;
+//   onYearSelect?: (year: number | null) => void;
+// }
 
-const SideMenu = (props: SideMenuProps) => {
+const SideMenu = () => {
   const {} = useProfileStore();
   const { state } = DI.resolve("ProfileSideMenuController");
   const profile = state.profile;
