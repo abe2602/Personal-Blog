@@ -6,6 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.respond
 import io.ktor.server.routing.*
@@ -25,10 +26,33 @@ fun main() {
     val port = System.getenv("PORT")?.toIntOrNull() ?: 8080
     logMongoEnv()
     embeddedServer(Netty, port = port, host = "0.0.0.0") {
+        configureCors()
         configureStatusPages()
         configureKoin()
         configureRouting()
     }.start(wait = true)
+}
+
+private fun Application.configureCors() {
+    install(CORS) {
+        allowMethod(io.ktor.http.HttpMethod.Get)
+        allowMethod(io.ktor.http.HttpMethod.Post)
+        allowMethod(io.ktor.http.HttpMethod.Put)
+        allowMethod(io.ktor.http.HttpMethod.Delete)
+        allowMethod(io.ktor.http.HttpMethod.Options)
+        allowHeader(io.ktor.http.HttpHeaders.ContentType)
+        allowHeader(io.ktor.http.HttpHeaders.Authorization)
+        // Local dev
+        allowHost("localhost:5173", schemes = listOf("http"))
+        allowHost("127.0.0.1:5173", schemes = listOf("http"))
+        // Production: set CORS_ORIGINS env on Railway (e.g. "https://myblog.com" or "https://myblog.com,https://www.myblog.com")
+        System.getenv("CORS_ORIGINS")?.split(",")?.forEach { origin ->
+            val trimmed = origin.trim().takeIf { it.isNotBlank() } ?: return@forEach
+            val host = trimmed.removePrefix("http://").removePrefix("https://")
+            val schemes = if (trimmed.startsWith("https")) listOf("https") else listOf("http", "https")
+            allowHost(host, schemes = schemes)
+        }
+    }
 }
 
 private fun logMongoEnv() {
