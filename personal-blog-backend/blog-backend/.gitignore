@@ -38,6 +38,11 @@ bin/
 /nbdist/
 /.nb-gradle/
 
+# Environment variables (do not commit - contains backend URL etc.)
+.env
+.env.local
+.env.*.local
+
 ### VS Code ###
 .vscode/
 
