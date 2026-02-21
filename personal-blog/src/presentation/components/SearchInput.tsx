@@ -35,14 +35,14 @@ const SearchInput = ({
         className="search-input"
         onChange={handleInputChange}
         value={searchTerm}
-        placeholder="Search"
+        placeholder="Pesquisar"
       />
       <button
         type="button"
         className={`search-input-icon-btn search-input-icon-btn--right ${!isSearchEnabled ? "search-input-icon-btn--disabled" : ""}`}
         onClick={handleIconClick}
         disabled={!isSearchEnabled}
-        aria-label="Search"
+        aria-label="Pesquisar"
       >
         <FaSearch className="search-input-icon-btn__icon" aria-hidden />
       </button>

@@ -73,7 +73,7 @@ const GalleryPage = () => {
         <NavBar />
         <div className="content-layout">
           <div className="posts-section">
-            <p>Error loading posts: {error}</p>
+            <p>Erro ao carregar os posts: {error}</p>
           </div>
         </div>
       </div>
@@ -145,7 +145,7 @@ const GalleryPage = () => {
           disabled={currentPage === 1}
           className="pagination-button pagination-nav"
         >
-          Previous
+          Anterior
         </button>
         <div className="pagination-numbers">
           {pages}
@@ -155,7 +155,7 @@ const GalleryPage = () => {
           disabled={currentPage === totalPages}
           className="pagination-button pagination-nav"
         >
-          Next
+          Próximo
         </button>
       </div>
     );
@@ -178,8 +178,8 @@ const GalleryPage = () => {
           {posts.length === 0 ? (
             <EmptyState
               emoji="🖼️"
-              title="No gallery posts yet"
-              message="Art and media will appear here when you add them."
+              title="Nenhum post na galeria ainda"
+              message="Arte e mídia aparecerão aqui quando você adicionar."
             />
           ) : (
             <>

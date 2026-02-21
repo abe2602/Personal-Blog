@@ -45,7 +45,7 @@ const PostPage = () => {
                 <NavBar />
                 <div className="content-layout">
                     <div className="posts-section">
-                        <p>Error loading posts: {error}</p>
+                        <p>Erro ao carregar os posts: {error}</p>
                     </div>
                     <div className="sidebar-section">
                         <SideMenu />
@@ -76,7 +76,7 @@ const PostPage = () => {
                                     {post.recommendedPosts && post.recommendedPosts.length > 0 && (
                                         <div className="recommended-posts-container">
                                             <h4 className="recommended-posts-heading">
-                                                Recommended Posts
+                                                Posts recomendados
                                             </h4>
                                             <div className="recommended-posts-list">
                                                 {post.recommendedPosts.map((recommendedPost: Post) => (

@@ -72,7 +72,7 @@ const SearchListPage = () => {
         <NavBar />
         <div className="content-layout">
           <div className="posts-section">
-            <p>Error loading posts: {error}</p>
+            <p>Erro ao carregar os posts: {error}</p>
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@ const SearchListPage = () => {
           disabled={currentPage === 1}
           className="pagination-button pagination-nav"
         >
-          Previous
+          Anterior
         </button>
         <div className="pagination-numbers">
           {pages}
@@ -154,7 +154,7 @@ const SearchListPage = () => {
           disabled={currentPage === totalPages}
           className="pagination-button pagination-nav"
         >
-          Next
+          Próximo
         </button>
       </div>
     );
@@ -175,14 +175,14 @@ const SearchListPage = () => {
           )}
           {!hasQuery && (
             <p className="search-results-heading">
-              Enter at least 3 characters in the search box and click the search button.
+              Digite pelo menos 3 caracteres na caixa de pesquisa e clique no botão de pesquisar.
             </p>
           )}
           {emptyState ? (
             <EmptyState
               emoji="🔍"
-              title="No results found"
-              message={`No posts match "${searchTerm}". Try different keywords?`}
+              title="Nenhum resultado encontrado"
+              message={`Nenhum post corresponde a "${searchTerm}". Tente outras palavras?`}
             />
           ) : (
             <>

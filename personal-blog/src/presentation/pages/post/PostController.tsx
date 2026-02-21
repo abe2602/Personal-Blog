@@ -17,7 +17,7 @@ export default function PostController({
             store.setError(null);
             console.log("post", post);
         } catch (error) {
-            store.setError(error instanceof Error ? error.message : "Unknown error");  
+            store.setError(error instanceof Error ? error.message : "Erro desconhecido");  
         } finally {
             store.setLoading(false);
         }

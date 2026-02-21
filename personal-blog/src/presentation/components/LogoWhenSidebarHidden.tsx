@@ -9,7 +9,7 @@ const LogoWhenSidebarHidden = () => {
     <Link
       to="/"
       className="logo-when-sidebar-hidden"
-      aria-label="Home"
+      aria-label="Início"
     >
       <img src="/logo.png" alt="" className="logo-when-sidebar-hidden-img" />
     </Link>

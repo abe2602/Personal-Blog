@@ -77,7 +77,7 @@ const HomePage = () => {
         <NavBar />
         <div className="content-layout">
           <div className="posts-section">
-            <p>Error loading posts: {error}</p>
+            <p>Erro ao carregar os posts: {error}</p>
           </div>
         </div>
       </div>
@@ -149,7 +149,7 @@ const HomePage = () => {
           disabled={currentPage === 1}
           className="pagination-button pagination-nav"
         >
-          Previous
+          Anterior
         </button>
         <div className="pagination-numbers">
           {pages}
@@ -159,7 +159,7 @@ const HomePage = () => {
           disabled={currentPage === totalPages}
           className="pagination-button pagination-nav"
         >
-          Next
+          Próximo
         </button>
       </div>
     );
@@ -182,8 +182,8 @@ const HomePage = () => {
           {posts.length === 0 ? (
             <EmptyState
               emoji="📝"
-              title="No posts yet"
-              message="Nothing here yet. Check back later—something might show up!"
+              title="Nenhum post ainda"
+              message="Nada por aqui ainda. Volte depois—pode ser que apareça algo!"
             />
           ) : (
             <>

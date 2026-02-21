@@ -34,7 +34,7 @@ export default function FavoritesController({
       store.setCurrentPage(page);
       store.setError(null);
     } catch (error) {
-      store.setError(error instanceof Error ? error.message : "Unknown error");
+      store.setError(error instanceof Error ? error.message : "Erro desconhecido");
     } finally {
       store.setLoading(false);
     }

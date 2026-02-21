@@ -29,7 +29,7 @@ const PostContent = (props: PostProps) => {
             <p>{preview}{isLong ? "…" : ""}</p>
             {isLong && (
               <a className="read-me" href={`/post/${post.id}`}>
-                Read more
+                Ler mais
               </a>
             )}
           </div>

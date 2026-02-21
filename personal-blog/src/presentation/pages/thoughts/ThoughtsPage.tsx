@@ -74,7 +74,7 @@ const ThoughtsPage = () => {
         <NavBar />
         <div className="content-layout">
           <div className="posts-section">
-            <p>Error loading posts: {error}</p>
+            <p>Erro ao carregar os posts: {error}</p>
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@ const ThoughtsPage = () => {
           disabled={currentPage === 1}
           className="pagination-button pagination-nav"
         >
-          Previous
+          Anterior
         </button>
         <div className="pagination-numbers">
           {pages}
@@ -156,7 +156,7 @@ const ThoughtsPage = () => {
           disabled={currentPage === totalPages}
           className="pagination-button pagination-nav"
         >
-          Next
+          Próximo
         </button>
       </div>
     );
@@ -179,8 +179,8 @@ const ThoughtsPage = () => {
           {posts.length === 0 ? (
             <EmptyState
               emoji="💭"
-              title="No thoughts yet"
-              message="Written pieces will show up here."
+              title="Nenhum pensamento ainda"
+              message="Textos escritos aparecerão aqui."
             />
           ) : (
             <>

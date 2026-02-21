@@ -19,13 +19,13 @@ const SideMenu = () => {
   
   return (
     <div className="side-menu">
-      <Link to="/" className="side-menu-logo" aria-label="Home">
+      <Link to="/" className="side-menu-logo" aria-label="Início">
         <img src="/logo.png" alt="" className="side-menu-logo-img" />
       </Link>
       {profile.imageUrl && (
         <img
           src={profile.imageUrl}
-          alt="Side menu"
+          alt="Menu lateral"
           className="side-menu-image"
         />
       )}
@@ -34,7 +34,7 @@ const SideMenu = () => {
       {/* Blog Archive
       {props.availableYears && props.availableYears.length > 0 && (
         <div className="side-menu-years">
-          <h3 className="side-menu-years-title">Blog Archieve</h3>
+          <h3 className="side-menu-years-title">Arquivo do blog</h3>
           <div className="side-menu-years-list">
             <button
               className={`side-menu-year-button ${
@@ -42,7 +42,7 @@ const SideMenu = () => {
               }`}
               onClick={() => props.onYearSelect?.(null)}
             >
-              All
+              Todos
             </button>
             {props.availableYears.map((year) => (
               <button
