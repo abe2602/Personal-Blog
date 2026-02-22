@@ -225,6 +225,12 @@ body {
   line-height: 1.7;
 }
 
+/* Clamp height in list/preview so "Ler mais" is used */
+.post-body.post-body-preview {
+  max-height: 10em;
+  overflow: hidden;
+}
+
 .post-body p {
   margin-bottom: 15px;
 }

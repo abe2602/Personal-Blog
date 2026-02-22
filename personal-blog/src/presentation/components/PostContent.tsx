@@ -13,7 +13,6 @@ const PostContent = (props: PostProps) => {
   const plainText = stripHtml(post.description);
   const isLong =
     post.description.length > PREVIEW_LENGTH || plainText.length > PREVIEW_LENGTH;
-  const preview = isLong ? plainText.substring(0, PREVIEW_LENGTH) : plainText;
 
   return (
     <li key={props.index} className="main-content post-list-item">
@@ -26,7 +25,10 @@ const PostContent = (props: PostProps) => {
           )}
 
           <div>
-            <p>{preview}{isLong ? "…" : ""}</p>
+            <div
+              className={`post-body${isLong ? " post-body-preview" : ""}`}
+              dangerouslySetInnerHTML={{ __html: post.description }}
+            />
             {isLong && (
               <a className="read-me" href={`/post/${post.id}`}>
                 Ler mais
