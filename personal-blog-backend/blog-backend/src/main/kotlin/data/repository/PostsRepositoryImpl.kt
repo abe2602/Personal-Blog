@@ -1,6 +1,5 @@
 package org.example.data.repository
 
-import org.example.data.cache.PostsListCacheKey
 import org.example.data.posts.PostsDataSource
 import org.example.data.posts.toDatabase
 import org.example.domain.model.Post
@@ -15,7 +14,6 @@ class PostsRepositoryImpl(
     private val dataSource: PostsDataSource
 ) : PostsRepository {
 
-    private val listCache = ConcurrentHashMap<PostsListCacheKey, PostsListing>()
     private val postCache = ConcurrentHashMap<Int, Post>()
 
     override suspend fun getPostsList(
@@ -24,9 +22,6 @@ class PostsRepositoryImpl(
         pageSize: Int,
         title: String?,
     ): PostsListing {
-        val key = PostsListCacheKey(type = type, page = page, pageSize = pageSize, title = title)
-        listCache[key]?.let { return it }
-
         val databaseType = type?.toDatabaseType()
         val posts = dataSource.getPostsList(
             type = databaseType,
@@ -34,10 +29,8 @@ class PostsRepositoryImpl(
             page = page,
             title = title
         ).map { it.toDomain() }
-        val total = countPosts(type = type, title = title)
-        val result = PostsListing(postsList = posts, total = total)
-        listCache[key] = result
-        return result
+        val total = dataSource.countPosts(type = databaseType, title = title)
+        return PostsListing(postsList = posts, total = total)
     }
 
     override suspend fun getPostById(id: Int): Post? {
@@ -45,10 +38,6 @@ class PostsRepositoryImpl(
         val post = dataSource.getPost(id)?.toDomain()
         post?.let { postCache[id] = it }
         return post
-    }
-
-    private suspend fun countPosts(type: PostType?, title: String? = null): Int {
-        return dataSource.countPosts(type?.toDatabaseType(), title)
     }
 
     override suspend fun savePost(post: Post): Post {
@@ -64,7 +53,6 @@ class PostsRepositoryImpl(
     }
 
     private fun invalidateCache() {
-        listCache.clear()
         postCache.clear()
     }
 }
