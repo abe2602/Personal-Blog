@@ -38,6 +38,7 @@ private fun Application.configureCors() {
         allowMethod(io.ktor.http.HttpMethod.Get)
         allowMethod(io.ktor.http.HttpMethod.Post)
         allowMethod(io.ktor.http.HttpMethod.Put)
+        allowMethod(io.ktor.http.HttpMethod.Patch)
         allowMethod(io.ktor.http.HttpMethod.Delete)
         allowMethod(io.ktor.http.HttpMethod.Options)
         allowHeader(io.ktor.http.HttpHeaders.ContentType)

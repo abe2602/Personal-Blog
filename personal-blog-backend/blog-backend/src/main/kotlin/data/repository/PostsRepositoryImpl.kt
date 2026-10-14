@@ -52,6 +52,25 @@ class PostsRepositoryImpl(
         return databasePost.toDomain()
     }
 
+    override suspend fun deletePost(id: Int): Boolean {
+        val deleted = dataSource.deletePost(id)
+        if (deleted) postCache.remove(id)
+        return deleted
+    }
+
+    override suspend fun updatePost(post: Post): Post? {
+        val databasePost = post.toDatabase(
+            id = post.id,
+            recommendedPosts = post.recommendedPosts.map { it.toDatabase(it.id, emptyList()) }
+        )
+        val updated = dataSource.updatePost(databasePost)
+        if (updated) {
+            postCache.remove(post.id)
+            return dataSource.getPost(post.id)?.toDomain()
+        }
+        return null
+    }
+
     private fun invalidateCache() {
         postCache.clear()
     }

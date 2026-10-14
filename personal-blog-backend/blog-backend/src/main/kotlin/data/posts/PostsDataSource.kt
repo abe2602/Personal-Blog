@@ -19,5 +19,9 @@ interface PostsDataSource {
 
     suspend fun savePost(post: DatabasePost)
 
+    suspend fun deletePost(id: Int): Boolean
+
+    suspend fun updatePost(post: DatabasePost): Boolean
+
     suspend fun getRandomPosts(limit: Int): List<DatabasePost>
 }

@@ -16,4 +16,8 @@ interface PostsRepository {
     suspend fun getPostById(id: Int): Post?
 
     suspend fun savePost(post: Post): Post
+
+    suspend fun deletePost(id: Int): Boolean
+
+    suspend fun updatePost(post: Post): Post?
 }

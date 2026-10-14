@@ -90,6 +90,26 @@ class PostsDataSourceImpl(
         collection.insertOne(post)
     }
 
+    override suspend fun deletePost(id: Int): Boolean {
+        return try {
+            val result = collection.deleteOne(Filters.eq("_id", id))
+            result.deletedCount == 1L
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    override suspend fun updatePost(post: DatabasePost): Boolean {
+        return try {
+            val result = collection.replaceOne(Filters.eq("_id", post.id), post)
+            result.modifiedCount == 1L
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
     override suspend fun getRandomPosts(limit: Int): List<DatabasePost> {
         if (limit <= 0) return emptyList()
         return try {
